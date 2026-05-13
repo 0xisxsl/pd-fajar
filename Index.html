@@ -539,6 +539,76 @@ button:focus-visible,.qa-btn:focus-visible,.export-card:focus-visible,.nav-item:
 @media (prefers-reduced-motion: reduce){
   *,*::before,*::after{animation-duration:.01ms !important;animation-iteration-count:1 !important;transition-duration:.01ms !important;}
 }
+
+/* ============================================================ */
+/* ===== AUTH SCREEN (Login/Register) ===== */
+/* ============================================================ */
+.auth-overlay{position:fixed;inset:0;background:linear-gradient(135deg,#0B1526 0%,#162340 50%,#1E2D4A 100%);z-index:10000;display:flex;align-items:center;justify-content:center;padding:20px;overflow-y:auto;}
+.auth-overlay.hidden{display:none;}
+.auth-card{background:white;border-radius:20px;padding:36px 32px;width:100%;max-width:420px;box-shadow:0 25px 50px -12px rgba(0,0,0,.5);}
+.auth-brand{display:flex;align-items:center;gap:12px;justify-content:center;margin-bottom:8px;}
+.auth-brand-icon{width:44px;height:44px;background:linear-gradient(135deg,var(--accent),#F97316);border-radius:12px;display:flex;align-items:center;justify-content:center;font-family:var(--font-head);font-weight:800;font-size:22px;color:white;box-shadow:0 4px 12px rgba(245,158,11,.4);}
+.auth-brand-name{font-family:var(--font-head);font-size:22px;font-weight:700;color:var(--text);letter-spacing:-.5px;}
+.auth-brand-name span{color:var(--accent);}
+.auth-title{font-family:var(--font-head);font-size:18px;font-weight:600;text-align:center;margin:14px 0 4px;color:var(--text);}
+.auth-sub{font-size:13px;color:var(--text3);text-align:center;margin-bottom:22px;}
+.auth-tabs{display:flex;background:#F1F5F9;border-radius:10px;padding:4px;margin-bottom:18px;}
+.auth-tab{flex:1;text-align:center;padding:9px 12px;font-size:13px;font-weight:600;color:var(--text2);border-radius:7px;cursor:pointer;border:none;background:transparent;font-family:var(--font-body);transition:all .2s;}
+.auth-tab.active{background:white;color:var(--text);box-shadow:0 1px 3px rgba(0,0,0,.08);}
+.auth-form{display:flex;flex-direction:column;gap:12px;}
+.auth-label{font-size:12px;font-weight:600;color:var(--text2);margin-bottom:-6px;}
+.auth-input{width:100%;padding:11px 14px;border:1.5px solid var(--border);border-radius:10px;font-size:14px;font-family:var(--font-body);outline:none;transition:border .2s;background:white;color:var(--text);}
+.auth-input:focus{border-color:var(--accent);}
+.auth-btn{width:100%;padding:12px;border:none;border-radius:10px;font-size:14px;font-weight:600;cursor:pointer;font-family:var(--font-body);transition:all .2s;display:flex;align-items:center;justify-content:center;gap:8px;}
+.auth-btn-primary{background:var(--accent);color:white;}
+.auth-btn-primary:hover{background:var(--accent2);}
+.auth-btn-primary:disabled{opacity:.6;cursor:not-allowed;}
+.auth-btn-google{background:white;color:var(--text);border:1.5px solid var(--border);}
+.auth-btn-google:hover{background:#F8FAFC;border-color:#CBD5E1;}
+.auth-btn-ghost{background:transparent;color:var(--text2);border:none;font-size:12.5px;padding:8px;text-decoration:underline;}
+.auth-btn-ghost:hover{color:var(--text);}
+.auth-divider{display:flex;align-items:center;gap:10px;margin:14px 0;color:var(--text3);font-size:11px;}
+.auth-divider::before,.auth-divider::after{content:'';flex:1;height:1px;background:var(--border);}
+.auth-error{background:#FEF2F2;border:1px solid #FECACA;color:#991B1B;padding:10px 12px;border-radius:8px;font-size:12.5px;line-height:1.4;display:none;}
+.auth-error.show{display:block;}
+.auth-info{background:#EFF6FF;border:1px solid #BFDBFE;color:#1E40AF;padding:10px 12px;border-radius:8px;font-size:11.5px;line-height:1.5;margin-top:14px;}
+.auth-config-warn{background:#FFFBEB;border:1px solid #FDE68A;color:#92400E;padding:12px;border-radius:10px;font-size:12px;line-height:1.5;margin-bottom:18px;}
+.auth-config-warn strong{color:#78350F;display:block;margin-bottom:4px;}
+.auth-config-warn code{background:rgba(0,0,0,.06);padding:1px 5px;border-radius:3px;font-family:var(--font-mono);font-size:11px;}
+
+/* ===== USER MENU (topbar) ===== */
+.user-menu-wrap{position:relative;}
+.user-avatar-btn{display:flex;align-items:center;gap:8px;padding:4px 10px 4px 4px;border:1px solid var(--border);border-radius:24px;background:white;cursor:pointer;font-family:var(--font-body);transition:all .2s;}
+.user-avatar-btn:hover{background:var(--bg);border-color:#CBD5E1;}
+.user-avatar{width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,var(--accent),#F97316);color:white;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:12px;font-family:var(--font-head);overflow:hidden;flex-shrink:0;}
+.user-avatar img{width:100%;height:100%;object-fit:cover;}
+.user-name-short{font-size:12.5px;font-weight:600;color:var(--text);max-width:110px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.user-dropdown{position:absolute;top:calc(100% + 8px);right:0;background:white;border:1px solid var(--border);border-radius:12px;box-shadow:0 10px 30px rgba(0,0,0,.12);min-width:240px;padding:8px;z-index:300;display:none;}
+.user-dropdown.show{display:block;}
+.user-dropdown-header{padding:10px 12px;border-bottom:1px solid var(--border);margin-bottom:6px;}
+.user-dropdown-name{font-size:13.5px;font-weight:600;color:var(--text);}
+.user-dropdown-email{font-size:11.5px;color:var(--text3);margin-top:2px;word-break:break-all;}
+.user-dropdown-mode{display:inline-block;font-size:9.5px;font-weight:700;padding:2px 7px;border-radius:20px;margin-top:6px;letter-spacing:.4px;text-transform:uppercase;}
+.user-dropdown-mode.cloud{background:#ECFDF5;color:#065F46;}
+.user-dropdown-mode.guest{background:#FEF3C7;color:#92400E;}
+.user-dropdown-item{display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:8px;cursor:pointer;font-size:13px;color:var(--text);border:none;background:transparent;width:100%;text-align:left;font-family:var(--font-body);}
+.user-dropdown-item:hover{background:var(--bg);}
+.user-dropdown-item.danger{color:var(--red);}
+.user-dropdown-item svg{width:15px;height:15px;}
+
+/* ===== SYNC INDICATOR ===== */
+.sync-indicator{display:inline-flex;align-items:center;gap:5px;font-size:11px;color:var(--text3);padding:3px 8px;border-radius:20px;background:#F1F5F9;font-family:var(--font-mono);}
+.sync-indicator.syncing{color:#1E40AF;background:#EFF6FF;}
+.sync-indicator.synced{color:#065F46;background:#ECFDF5;}
+.sync-indicator.error{color:#991B1B;background:#FEF2F2;}
+.sync-indicator-dot{width:6px;height:6px;border-radius:50%;background:currentColor;}
+.sync-indicator.syncing .sync-indicator-dot{animation:pulseDot 1.2s ease-in-out infinite;}
+
+@media (max-width:640px){
+  .auth-card{padding:28px 22px;}
+  .user-name-short{display:none;}
+  .sync-indicator{display:none;}
+}
 </style>
 </head>
 <body>
@@ -548,6 +618,58 @@ button:focus-visible,.qa-btn:focus-visible,.export-card:focus-visible,.nav-item:
     <strong>JavaScript dibutuhkan.</strong> Aplikasi ini sepenuhnya berjalan di browser dan memerlukan JavaScript aktif untuk berfungsi. Mohon aktifkan JavaScript di pengaturan browser Anda dan refresh halaman.
   </div>
 </noscript>
+
+<!-- ============================== -->
+<!-- AUTH SCREEN (Login / Register) -->
+<!-- ============================== -->
+<div class="auth-overlay hidden" id="authOverlay" role="dialog" aria-modal="true" aria-labelledby="authTitle">
+  <div class="auth-card">
+    <div class="auth-brand">
+      <div class="auth-brand-icon">F</div>
+      <div class="auth-brand-name">PD <span>FAJAR</span></div>
+    </div>
+    <div class="auth-title" id="authTitle">Selamat Datang</div>
+    <div class="auth-sub">Masuk untuk menyinkronkan data Anda ke cloud</div>
+
+    <!-- Warning kalau Firebase config belum di-set -->
+    <div class="auth-config-warn" id="authConfigWarn" style="display:none;">
+      <strong>⚙️ Firebase belum dikonfigurasi</strong>
+      Cloud sync &amp; login tidak aktif. Buka <code>FIREBASE_CONFIG</code> di file HTML lalu paste config dari console Firebase Anda. Untuk sekarang Anda bisa lanjut sebagai tamu (data tersimpan lokal di browser ini).
+    </div>
+
+    <div class="auth-tabs" id="authTabs">
+      <button type="button" class="auth-tab active" data-mode="login" onclick="switchAuthTab('login')">Masuk</button>
+      <button type="button" class="auth-tab" data-mode="register" onclick="switchAuthTab('register')">Daftar</button>
+    </div>
+
+    <div class="auth-error" id="authError"></div>
+
+    <form class="auth-form" id="authForm" onsubmit="event.preventDefault();submitAuthForm();" autocomplete="on">
+      <input type="text" id="authName" class="auth-input" placeholder="Nama lengkap" autocomplete="name" style="display:none;">
+      <input type="email" id="authEmail" class="auth-input" placeholder="Email" autocomplete="email" required>
+      <input type="password" id="authPassword" class="auth-input" placeholder="Password (min. 6 karakter)" autocomplete="current-password" required>
+      <button type="submit" class="auth-btn auth-btn-primary" id="authSubmitBtn">Masuk</button>
+      <button type="button" class="auth-btn-ghost" id="forgotPasswordBtn" onclick="resetPasswordFlow()">Lupa password?</button>
+    </form>
+
+    <div class="auth-divider">atau</div>
+
+    <button type="button" class="auth-btn auth-btn-google" id="googleSignInBtn" onclick="signInWithGoogle()">
+      <svg width="18" height="18" viewBox="0 0 48 48" aria-hidden="true">
+        <path fill="#FFC107" d="M43.611 20.083H42V20H24v8h11.303c-1.649 4.657-6.08 8-11.303 8c-6.627 0-12-5.373-12-12s5.373-12 12-12c3.059 0 5.842 1.154 7.961 3.039l5.657-5.657C34.046 6.053 29.268 4 24 4C12.955 4 4 12.955 4 24s8.955 20 20 20s20-8.955 20-20c0-1.341-.138-2.65-.389-3.917z"/>
+        <path fill="#FF3D00" d="m6.306 14.691l6.571 4.819C14.655 15.108 18.961 12 24 12c3.059 0 5.842 1.154 7.961 3.039l5.657-5.657C34.046 6.053 29.268 4 24 4C16.318 4 9.656 8.337 6.306 14.691z"/>
+        <path fill="#4CAF50" d="M24 44c5.166 0 9.86-1.977 13.409-5.192l-6.19-5.238A11.91 11.91 0 0 1 24 36c-5.202 0-9.619-3.317-11.283-7.946l-6.522 5.025C9.505 39.556 16.227 44 24 44z"/>
+        <path fill="#1976D2" d="M43.611 20.083H42V20H24v8h11.303a12.04 12.04 0 0 1-4.087 5.571l.003-.002l6.19 5.238C36.971 39.205 44 34 44 24c0-1.341-.138-2.65-.389-3.917z"/>
+      </svg>
+      Masuk dengan Google
+    </button>
+
+    <div class="auth-info">
+      💡 Atau lanjutkan sebagai <strong>tamu</strong> — data hanya tersimpan di browser ini (tidak tersinkron antar perangkat).
+    </div>
+    <button type="button" class="auth-btn-ghost" style="width:100%;margin-top:8px;" onclick="continueAsGuest()">Lanjutkan sebagai Tamu →</button>
+  </div>
+</div>
 
 <!-- LOADING OVERLAY -->
 <div class="loading-overlay hidden" id="loadingOverlay" role="status" aria-live="polite" aria-label="Memproses">
@@ -656,11 +778,42 @@ button:focus-visible,.qa-btn:focus-visible,.export-card:focus-visible,.nav-item:
       <div class="topbar-sub" id="pageSubtitle">Ringkasan keuangan bisnis Anda</div>
     </div>
     <div class="topbar-right">
+      <span class="sync-indicator" id="syncIndicator" title="Status sinkronisasi" style="display:none;">
+        <span class="sync-indicator-dot"></span>
+        <span id="syncIndicatorText">Lokal</span>
+      </span>
       <button class="btn btn-outline btn-sm" onclick="navigateTo('tambah')">
         <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" width="14" height="14"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
         Tambah Hutang
       </button>
       <div id="currentDate" style="font-size:12px;color:var(--text3);font-family:var(--font-mono);"></div>
+      <!-- USER MENU -->
+      <div class="user-menu-wrap" id="userMenuWrap" style="display:none;">
+        <button class="user-avatar-btn" id="userAvatarBtn" type="button" onclick="toggleUserDropdown()" aria-haspopup="true" aria-expanded="false">
+          <div class="user-avatar" id="userAvatar">?</div>
+          <span class="user-name-short" id="userNameShort">Tamu</span>
+          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="user-dropdown" id="userDropdown" role="menu">
+          <div class="user-dropdown-header">
+            <div class="user-dropdown-name" id="userDropdownName">—</div>
+            <div class="user-dropdown-email" id="userDropdownEmail">—</div>
+            <span class="user-dropdown-mode guest" id="userDropdownMode">Mode Tamu</span>
+          </div>
+          <button class="user-dropdown-item" type="button" onclick="closeUserDropdown();navigateTo('settings')">
+            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+            Pengaturan
+          </button>
+          <button class="user-dropdown-item" id="upgradeFromGuestBtn" type="button" onclick="closeUserDropdown();showAuthScreen('login');" style="display:none;">
+            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><line x1="20" y1="8" x2="20" y2="14"/><line x1="23" y1="11" x2="17" y2="11"/></svg>
+            Login / Daftar untuk Cloud Sync
+          </button>
+          <button class="user-dropdown-item danger" id="logoutBtn" type="button" onclick="signOutUser()" style="display:none;">
+            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+            Keluar
+          </button>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -1443,7 +1596,18 @@ button:focus-visible,.qa-btn:focus-visible,.export-card:focus-visible,.nav-item:
         </div>
 
         <div class="settings-section">
-          <div class="settings-section-title">💾 Data & Backup</div>
+          <div class="settings-section-title">🎭 Tampilan Demo</div>
+          <div class="settings-row">
+            <div>
+              <div class="settings-label">Sembunyikan Tombol Demo Data</div>
+              <div class="settings-desc">Sembunyikan tombol "Load Demo Data" &amp; notifikasi tip demo dari tampilan</div>
+            </div>
+            <div class="toggle" id="toggleHideDemo" onclick="toggleHideDemo(this)"><div class="toggle-knob"></div></div>
+          </div>
+        </div>
+
+        <div class="settings-section">
+          <div class="settings-section-title">💾 Data &amp; Backup</div>
           <div class="settings-row">
             <div>
               <div class="settings-label">Total Data Hutang</div>
@@ -1451,8 +1615,8 @@ button:focus-visible,.qa-btn:focus-visible,.export-card:focus-visible,.nav-item:
             </div>
             <button class="btn btn-outline btn-sm" onclick="exportJson()">Backup JSON</button>
           </div>
-          <div style="margin-top:16px;display:flex;gap:10px;flex-wrap:wrap;">
-            <button class="btn btn-primary" onclick="loadDemoData()">Load Demo Data</button>
+          <div style="margin-top:16px;display:flex;gap:10px;flex-wrap:wrap;" id="demoActionsRow">
+            <button class="btn btn-primary" id="loadDemoBtn" onclick="loadDemoData()">Load Demo Data</button>
             <button class="btn btn-danger btn-sm" onclick="clearAllData()">Hapus Semua Data</button>
           </div>
         </div>
@@ -1480,8 +1644,192 @@ button:focus-visible,.qa-btn:focus-visible,.export-card:focus-visible,.nav-item:
   </div>
 </div>
 
+<!-- ================================================================ -->
+<!-- ===== FIREBASE AUTH + FIRESTORE CLOUD SYNC (ES Module) ========== -->
+<!-- ================================================================ -->
+<!--
+  CARA SETUP (sekali saja):
+  1. Buka https://console.firebase.google.com → Add project → ikuti wizard.
+  2. Di project tsb: Build → Authentication → Get started.
+     - Enable "Email/Password"
+     - Enable "Google" (set support email)
+  3. Di project tsb: Build → Firestore Database → Create database → Start in production mode.
+  4. Tab Rules → tempel rules berikut → Publish:
+
+       rules_version = '2';
+       service cloud.firestore {
+         match /databases/{database}/documents {
+           match /users/{userId}/{document=**} {
+             allow read, write: if request.auth != null && request.auth.uid == userId;
+           }
+         }
+       }
+
+  5. Project settings (gear icon) → General → Your apps → klik </> "Web".
+     Register app, COPY object `firebaseConfig`, lalu tempel ke FIREBASE_CONFIG di bawah.
+  6. Authentication → Settings → Authorized domains → tambahkan domain Netlify Anda
+     (contoh: your-site.netlify.app, dan domain kustom kalau ada).
+  7. Deploy ke Netlify — selesai. App akan auto-detect config dan mengaktifkan cloud sync.
+
+  Jika FIREBASE_CONFIG dibiarkan kosong, app TETAP JALAN dengan localStorage seperti versi lama
+  (mode "Tamu"), jadi tidak akan rusak walaupun setup belum selesai.
+-->
+<script type="module">
+// ===== TEMPEL FIREBASE CONFIG ANDA DI SINI =====
+const FIREBASE_CONFIG = {
+  // apiKey: "AIzaSy...",
+  // authDomain: "your-project.firebaseapp.com",
+  // projectId: "your-project-id",
+  // storageBucket: "your-project.appspot.com",
+  // messagingSenderId: "1234567890",
+  // appId: "1:1234567890:web:abcdef123456"
+};
+// ===============================================
+
+const FIREBASE_ENABLED = !!FIREBASE_CONFIG.apiKey;
+window.__FIREBASE_ENABLED__ = FIREBASE_ENABLED;
+
+let _app=null, _auth=null, _db=null, _currentUser=null;
+let _unsubscribeSnapshot=null;
+let _saveDebounceTimer=null;
+let _suppressNextSnapshot=false;
+
+// Expose status getter
+window.cloudGetUser = () => _currentUser;
+window.cloudIsEnabled = () => FIREBASE_ENABLED;
+window.cloudIsSignedIn = () => !!_currentUser;
+
+if (FIREBASE_ENABLED) {
+  try {
+    const { initializeApp } = await import('https://www.gstatic.com/firebasejs/10.13.2/firebase-app.js');
+    const {
+      getAuth, onAuthStateChanged,
+      createUserWithEmailAndPassword, signInWithEmailAndPassword,
+      GoogleAuthProvider, signInWithPopup, signInWithRedirect, getRedirectResult,
+      signOut, sendPasswordResetEmail, updateProfile, browserLocalPersistence, setPersistence
+    } = await import('https://www.gstatic.com/firebasejs/10.13.2/firebase-auth.js');
+    const {
+      getFirestore, doc, setDoc, getDoc, onSnapshot, serverTimestamp
+    } = await import('https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore.js');
+
+    _app  = initializeApp(FIREBASE_CONFIG);
+    _auth = getAuth(_app);
+    _db   = getFirestore(_app);
+    await setPersistence(_auth, browserLocalPersistence);
+
+    // ----- AUTH FUNCTIONS exposed to window -----
+    window.cloudSignUp = async (email, password, displayName) => {
+      const cred = await createUserWithEmailAndPassword(_auth, email, password);
+      if (displayName) {
+        try { await updateProfile(cred.user, { displayName }); } catch(e){ console.warn(e); }
+      }
+      return cred.user;
+    };
+    window.cloudSignIn = (email, password) =>
+      signInWithEmailAndPassword(_auth, email, password).then(c => c.user);
+
+    window.cloudSignInGoogle = async () => {
+      const provider = new GoogleAuthProvider();
+      try {
+        const cred = await signInWithPopup(_auth, provider);
+        return cred.user;
+      } catch (err) {
+        // Some browsers/extensions block popup; fall back to redirect
+        if (err && (err.code === 'auth/popup-blocked' || err.code === 'auth/popup-closed-by-user' || err.code === 'auth/cancelled-popup-request')) {
+          await signInWithRedirect(_auth, provider);
+          return null;
+        }
+        throw err;
+      }
+    };
+
+    window.cloudSignOut = () => signOut(_auth);
+    window.cloudResetPassword = (email) => sendPasswordResetEmail(_auth, email);
+
+    // ----- FIRESTORE SYNC -----
+    // Document shape: users/{uid} = { debts:[], payments:[], settings:{}, updatedAt }
+    const userDocRef = (uid) => doc(_db, 'users', uid);
+
+    window.cloudSaveData = (debts, payments, settings) => {
+      if (!_currentUser) return Promise.resolve(false);
+      // Debounce: rapid edits → 1 write
+      clearTimeout(_saveDebounceTimer);
+      return new Promise((resolve) => {
+        _saveDebounceTimer = setTimeout(async () => {
+          try {
+            window.__updateSyncIndicator__ && window.__updateSyncIndicator__('syncing');
+            _suppressNextSnapshot = true;
+            await setDoc(userDocRef(_currentUser.uid), {
+              debts: debts || [],
+              payments: payments || [],
+              settings: settings || {},
+              updatedAt: serverTimestamp(),
+              clientUpdatedAt: Date.now()
+            }, { merge: true });
+            window.__updateSyncIndicator__ && window.__updateSyncIndicator__('synced');
+            resolve(true);
+          } catch (err) {
+            console.error('cloudSaveData error:', err);
+            window.__updateSyncIndicator__ && window.__updateSyncIndicator__('error');
+            resolve(false);
+          }
+        }, 800); // debounce 800ms
+      });
+    };
+
+    window.cloudLoadDataOnce = async (uid) => {
+      const snap = await getDoc(userDocRef(uid));
+      if (!snap.exists()) return null;
+      return snap.data();
+    };
+
+    window.cloudSubscribe = (uid, onChange) => {
+      if (_unsubscribeSnapshot) { _unsubscribeSnapshot(); _unsubscribeSnapshot = null; }
+      _unsubscribeSnapshot = onSnapshot(userDocRef(uid), (snap) => {
+        if (_suppressNextSnapshot) { _suppressNextSnapshot = false; return; }
+        if (snap.metadata && snap.metadata.hasPendingWrites) return; // skip local echo
+        if (snap.exists()) onChange(snap.data());
+      }, (err) => {
+        console.error('Snapshot error:', err);
+        window.__updateSyncIndicator__ && window.__updateSyncIndicator__('error');
+      });
+    };
+    window.cloudUnsubscribe = () => {
+      if (_unsubscribeSnapshot) { _unsubscribeSnapshot(); _unsubscribeSnapshot = null; }
+    };
+
+    // ----- AUTH STATE LISTENER -----
+    onAuthStateChanged(_auth, (user) => {
+      _currentUser = user;
+      // Notify main app
+      if (window.__onAuthStateChanged__) {
+        window.__onAuthStateChanged__(user);
+      } else {
+        // Main script hasn't loaded yet — stash for later
+        window.__pendingAuthUser__ = user;
+        window.__pendingAuthFlag__ = true;
+      }
+    });
+
+    // Handle redirect result (in case popup was blocked)
+    getRedirectResult(_auth).catch((err) => {
+      if (err && err.code && err.code !== 'auth/null-user') console.warn('Redirect result:', err);
+    });
+
+  } catch (err) {
+    console.error('Firebase init failed:', err);
+    window.__FIREBASE_ENABLED__ = false;
+  }
+}
+</script>
+
 <script>
 'use strict';
+
+// ====== AUTH STATE (main thread) ======
+let currentUser = null;             // Firebase user object, or null
+let authMode = 'guest';             // 'cloud' | 'guest'
+let cloudReady = false;             // true setelah initial load from cloud
 
 // ====== SECURITY HELPERS ======
 // Escape HTML entities — MUST be used everywhere user/AI/OCR data is rendered via innerHTML
@@ -1627,6 +1975,10 @@ function saveData() {
     showToast('Gagal menyimpan: storage penuh atau dinonaktifkan', 'error');
     console.error('saveData failed', e);
   }
+  // Cloud sync (debounced di module)
+  if (authMode === 'cloud' && currentUser && window.cloudSaveData) {
+    window.cloudSaveData(debts, payments, settings);
+  }
 }
 
 function saveApiKey(val) {
@@ -1639,12 +1991,18 @@ function saveApiKey(val) {
 function saveSetting(key, val) {
   settings[key] = val;
   localStorage.setItem('usahaai_settings', JSON.stringify(settings));
+  if (authMode === 'cloud' && currentUser && window.cloudSaveData) {
+    window.cloudSaveData(debts, payments, settings);
+  }
 }
 
 function toggleSetting(key, el) {
   settings[key] = !settings[key];
   localStorage.setItem('usahaai_settings', JSON.stringify(settings));
   applyToggle(el.id, settings[key]);
+  if (authMode === 'cloud' && currentUser && window.cloudSaveData) {
+    window.cloudSaveData(debts, payments, settings);
+  }
 }
 
 function applyToggle(id, val) {
@@ -1875,7 +2233,7 @@ async function callAI({ messages, system, maxTokens = 1000, imageB64 = null, ima
     if (system) {
       body.systemInstruction = { parts: [{ text: system }] };
     }
-    const model = 'gemini-1.5-flash';
+    const model = 'gemini-2.0-flash';
     const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${encodeURIComponent(info.key)}`;
     const resp = await fetchWithTimeout(url, {
       method: 'POST',
@@ -3984,10 +4342,389 @@ function loadDemoData() {
   }
 }
 
-// ====== INIT ======
-function init() {
+// ============================================================
+// ====== AUTH UI + CLOUD SYNC INTEGRATION ====================
+// ============================================================
+
+// ----- Sync indicator -----
+function updateSyncIndicator(state) {
+  const ind = document.getElementById('syncIndicator');
+  const txt = document.getElementById('syncIndicatorText');
+  if (!ind || !txt) return;
+  ind.classList.remove('syncing','synced','error');
+  if (authMode === 'guest') {
+    ind.style.display = 'inline-flex';
+    txt.textContent = 'Lokal';
+    return;
+  }
+  ind.style.display = 'inline-flex';
+  if (state === 'syncing') { ind.classList.add('syncing'); txt.textContent = 'Sinkron...'; }
+  else if (state === 'synced') { ind.classList.add('synced'); txt.textContent = 'Tersinkron'; }
+  else if (state === 'error') { ind.classList.add('error'); txt.textContent = 'Error sinkron'; }
+  else { txt.textContent = 'Cloud'; }
+}
+window.__updateSyncIndicator__ = updateSyncIndicator;
+
+// ----- Auth screen show/hide -----
+function showAuthScreen(mode) {
+  const overlay = document.getElementById('authOverlay');
+  if (!overlay) return;
+  overlay.classList.remove('hidden');
+  const warn = document.getElementById('authConfigWarn');
+  if (warn) warn.style.display = window.__FIREBASE_ENABLED__ ? 'none' : 'block';
+  // Disable email/google buttons if firebase not enabled
+  const disabled = !window.__FIREBASE_ENABLED__;
+  const submitBtn = document.getElementById('authSubmitBtn');
+  const googleBtn = document.getElementById('googleSignInBtn');
+  const forgotBtn = document.getElementById('forgotPasswordBtn');
+  if (submitBtn) submitBtn.disabled = disabled;
+  if (googleBtn) googleBtn.disabled = disabled;
+  if (forgotBtn) forgotBtn.style.display = disabled ? 'none' : 'block';
+  // Clear errors
+  const err = document.getElementById('authError');
+  if (err) { err.classList.remove('show'); err.textContent = ''; }
+  switchAuthTab(mode || 'login');
+}
+function hideAuthScreen() {
+  const overlay = document.getElementById('authOverlay');
+  if (overlay) overlay.classList.add('hidden');
+}
+window.showAuthScreen = showAuthScreen;
+
+function switchAuthTab(mode) {
+  const tabs = document.querySelectorAll('.auth-tab');
+  tabs.forEach(t => t.classList.toggle('active', t.dataset.mode === mode));
+  const nameField = document.getElementById('authName');
+  const submitBtn = document.getElementById('authSubmitBtn');
+  const pwdField = document.getElementById('authPassword');
+  const forgotBtn = document.getElementById('forgotPasswordBtn');
+  if (mode === 'register') {
+    nameField.style.display = 'block';
+    submitBtn.textContent = 'Daftar Akun';
+    pwdField.placeholder = 'Password (min. 6 karakter)';
+    pwdField.setAttribute('autocomplete','new-password');
+    if (forgotBtn) forgotBtn.style.display = 'none';
+  } else {
+    nameField.style.display = 'none';
+    submitBtn.textContent = 'Masuk';
+    pwdField.placeholder = 'Password';
+    pwdField.setAttribute('autocomplete','current-password');
+    if (forgotBtn) forgotBtn.style.display = window.__FIREBASE_ENABLED__ ? 'block' : 'none';
+  }
+  submitBtn.dataset.mode = mode;
+  const err = document.getElementById('authError');
+  if (err) { err.classList.remove('show'); err.textContent = ''; }
+}
+window.switchAuthTab = switchAuthTab;
+
+function showAuthError(msg) {
+  const err = document.getElementById('authError');
+  if (!err) return;
+  err.textContent = msg;
+  err.classList.add('show');
+}
+
+function friendlyAuthError(err) {
+  const code = (err && err.code) || '';
+  const map = {
+    'auth/invalid-email': 'Format email tidak valid.',
+    'auth/user-disabled': 'Akun ini telah dinonaktifkan.',
+    'auth/user-not-found': 'Email belum terdaftar.',
+    'auth/wrong-password': 'Password salah.',
+    'auth/invalid-credential': 'Email atau password salah.',
+    'auth/email-already-in-use': 'Email sudah terdaftar. Silakan masuk.',
+    'auth/weak-password': 'Password terlalu lemah (min. 6 karakter).',
+    'auth/network-request-failed': 'Koneksi internet bermasalah.',
+    'auth/too-many-requests': 'Terlalu banyak percobaan. Coba lagi nanti.',
+    'auth/popup-blocked': 'Popup diblokir browser. Coba lagi.',
+    'auth/unauthorized-domain': 'Domain ini belum diizinkan di Firebase. Tambahkan di Authentication → Settings → Authorized domains.'
+  };
+  return map[code] || (err && err.message) || 'Terjadi kesalahan.';
+}
+
+async function submitAuthForm() {
+  if (!window.__FIREBASE_ENABLED__) {
+    showAuthError('Firebase belum dikonfigurasi. Lanjutkan sebagai tamu.');
+    return;
+  }
+  const mode = document.getElementById('authSubmitBtn').dataset.mode || 'login';
+  const email = document.getElementById('authEmail').value.trim();
+  const password = document.getElementById('authPassword').value;
+  const name = document.getElementById('authName').value.trim();
+  if (!email || !password) { showAuthError('Email dan password wajib diisi.'); return; }
+  if (mode === 'register' && password.length < 6) { showAuthError('Password minimal 6 karakter.'); return; }
+  const btn = document.getElementById('authSubmitBtn');
+  btn.disabled = true;
+  const origTxt = btn.textContent;
+  btn.textContent = 'Memproses...';
   try {
-    loadData();
+    if (mode === 'register') {
+      await window.cloudSignUp(email, password, name || email.split('@')[0]);
+    } else {
+      await window.cloudSignIn(email, password);
+    }
+    // onAuthStateChanged akan handle sisanya
+  } catch (err) {
+    console.error(err);
+    showAuthError(friendlyAuthError(err));
+    btn.disabled = false;
+    btn.textContent = origTxt;
+  }
+}
+window.submitAuthForm = submitAuthForm;
+
+async function signInWithGoogle() {
+  if (!window.__FIREBASE_ENABLED__) {
+    showAuthError('Firebase belum dikonfigurasi. Lanjutkan sebagai tamu.');
+    return;
+  }
+  const btn = document.getElementById('googleSignInBtn');
+  btn.disabled = true;
+  try {
+    await window.cloudSignInGoogle();
+    // onAuthStateChanged akan handle hide overlay
+  } catch (err) {
+    console.error(err);
+    showAuthError(friendlyAuthError(err));
+    btn.disabled = false;
+  }
+}
+window.signInWithGoogle = signInWithGoogle;
+
+async function resetPasswordFlow() {
+  if (!window.__FIREBASE_ENABLED__) return;
+  const email = document.getElementById('authEmail').value.trim();
+  if (!email) { showAuthError('Isi email Anda dulu, lalu klik "Lupa password?".'); return; }
+  try {
+    await window.cloudResetPassword(email);
+    showAuthError('✓ Email reset password sudah dikirim ke ' + email);
+    const errEl = document.getElementById('authError');
+    if (errEl) { errEl.style.background='#ECFDF5'; errEl.style.borderColor='#A7F3D0'; errEl.style.color='#065F46'; }
+  } catch (err) {
+    showAuthError(friendlyAuthError(err));
+  }
+}
+window.resetPasswordFlow = resetPasswordFlow;
+
+function continueAsGuest() {
+  authMode = 'guest';
+  localStorage.setItem('usahaai_auth_choice', 'guest');
+  hideAuthScreen();
+  bootApp(); // boot ke localStorage flow
+}
+window.continueAsGuest = continueAsGuest;
+
+async function signOutUser() {
+  if (currentUser && window.cloudSignOut) {
+    try { await window.cloudSignOut(); } catch(e){ console.error(e); }
+  }
+  // Bersihkan local cache supaya data user A tidak nyangkut di session user B
+  try {
+    localStorage.removeItem('usahaai_debts');
+    localStorage.removeItem('usahaai_payments');
+  } catch(e){}
+  localStorage.removeItem('usahaai_auth_choice');
+  if (window.cloudUnsubscribe) window.cloudUnsubscribe();
+  // Reload page untuk reset state — simplest & paling aman
+  location.reload();
+}
+window.signOutUser = signOutUser;
+
+// ----- User dropdown -----
+function toggleUserDropdown() {
+  const dd = document.getElementById('userDropdown');
+  if (!dd) return;
+  dd.classList.toggle('show');
+  const btn = document.getElementById('userAvatarBtn');
+  if (btn) btn.setAttribute('aria-expanded', dd.classList.contains('show'));
+}
+window.toggleUserDropdown = toggleUserDropdown;
+function closeUserDropdown() {
+  const dd = document.getElementById('userDropdown');
+  if (dd) dd.classList.remove('show');
+  const btn = document.getElementById('userAvatarBtn');
+  if (btn) btn.setAttribute('aria-expanded','false');
+}
+window.closeUserDropdown = closeUserDropdown;
+// Klik di luar dropdown → tutup
+document.addEventListener('click', (e) => {
+  const wrap = document.getElementById('userMenuWrap');
+  if (!wrap) return;
+  if (!wrap.contains(e.target)) closeUserDropdown();
+});
+
+function refreshUserMenuUI() {
+  const wrap = document.getElementById('userMenuWrap');
+  if (!wrap) return;
+  wrap.style.display = 'block';
+
+  const avatar = document.getElementById('userAvatar');
+  const shortName = document.getElementById('userNameShort');
+  const ddName = document.getElementById('userDropdownName');
+  const ddEmail = document.getElementById('userDropdownEmail');
+  const ddMode = document.getElementById('userDropdownMode');
+  const upgradeBtn = document.getElementById('upgradeFromGuestBtn');
+  const logoutBtn = document.getElementById('logoutBtn');
+
+  if (authMode === 'cloud' && currentUser) {
+    const name = currentUser.displayName || (currentUser.email||'').split('@')[0] || 'User';
+    const email = currentUser.email || '';
+    const photo = currentUser.photoURL;
+    if (photo) {
+      avatar.innerHTML = '<img src="'+esc(photo)+'" alt="">';
+    } else {
+      avatar.textContent = (name[0]||'U').toUpperCase();
+    }
+    shortName.textContent = name;
+    ddName.textContent = name;
+    ddEmail.textContent = email;
+    ddMode.textContent = 'Cloud Sync Aktif';
+    ddMode.className = 'user-dropdown-mode cloud';
+    upgradeBtn.style.display = 'none';
+    logoutBtn.style.display = 'flex';
+  } else {
+    avatar.textContent = 'T';
+    shortName.textContent = 'Tamu';
+    ddName.textContent = 'Pengguna Tamu';
+    ddEmail.textContent = 'Data hanya di browser ini';
+    ddMode.textContent = 'Mode Tamu (Lokal)';
+    ddMode.className = 'user-dropdown-mode guest';
+    upgradeBtn.style.display = window.__FIREBASE_ENABLED__ ? 'flex' : 'none';
+    logoutBtn.style.display = 'flex'; // tetap tampil sebagai "Reset & Login Lain"
+  }
+}
+
+// ============================================================
+// ===== HIDE DEMO TOGGLE =====================================
+// ============================================================
+function applyHideDemoVisibility() {
+  const hide = !!(settings && settings.hideDemo);
+  const toggleEl = document.getElementById('toggleHideDemo');
+  if (toggleEl) applyToggle('toggleHideDemo', hide);
+  const demoBtn = document.getElementById('loadDemoBtn');
+  if (demoBtn) demoBtn.style.display = hide ? 'none' : 'inline-flex';
+}
+function toggleHideDemo(el) {
+  settings.hideDemo = !settings.hideDemo;
+  localStorage.setItem('usahaai_settings', JSON.stringify(settings));
+  applyToggle(el.id, settings.hideDemo);
+  applyHideDemoVisibility();
+  if (authMode === 'cloud' && currentUser && window.cloudSaveData) {
+    window.cloudSaveData(debts, payments, settings);
+  }
+  showToast(settings.hideDemo ? 'Tombol demo disembunyikan' : 'Tombol demo ditampilkan', 'info');
+}
+window.toggleHideDemo = toggleHideDemo;
+
+// ============================================================
+// ===== AUTH STATE HANDLER (dipanggil dari module) ===========
+// ============================================================
+async function handleAuthStateChange(user) {
+  if (user) {
+    currentUser = user;
+    authMode = 'cloud';
+    localStorage.setItem('usahaai_auth_choice', 'cloud');
+    hideAuthScreen();
+    updateSyncIndicator('syncing');
+
+    // Load data dari cloud
+    try {
+      const cloudData = await window.cloudLoadDataOnce(user.uid);
+      const localHasData = (debts && debts.length) || (payments && payments.length);
+      if (cloudData) {
+        // Cloud sudah ada — gunakan cloud sebagai source of truth
+        // Tapi: kalau user punya local data (dari sesi tamu) dan cloud kosong → upload
+        if (((!cloudData.debts || cloudData.debts.length===0) && (!cloudData.payments || cloudData.payments.length===0)) && localHasData) {
+          // Upload local ke cloud
+          await window.cloudSaveData(debts, payments, settings);
+          showToast('Data lokal Anda telah diunggah ke cloud ☁️','info');
+        } else {
+          debts = Array.isArray(cloudData.debts) ? cloudData.debts : [];
+          payments = Array.isArray(cloudData.payments) ? cloudData.payments : [];
+          if (cloudData.settings && typeof cloudData.settings === 'object') {
+            settings = { ...settings, ...cloudData.settings };
+            localStorage.setItem('usahaai_settings', JSON.stringify(settings));
+          }
+          // Mirror ke localStorage
+          try {
+            localStorage.setItem('usahaai_debts', JSON.stringify(debts));
+            localStorage.setItem('usahaai_payments', JSON.stringify(payments));
+          } catch(e){}
+        }
+      } else if (localHasData) {
+        // Belum pernah ada cloud doc — upload local data
+        await window.cloudSaveData(debts, payments, settings);
+        showToast('Data lokal Anda telah diunggah ke cloud ☁️','info');
+      }
+      cloudReady = true;
+      updateSyncIndicator('synced');
+
+      // Subscribe untuk realtime sync antar device
+      window.cloudSubscribe(user.uid, (data) => {
+        if (!data) return;
+        debts = Array.isArray(data.debts) ? data.debts : [];
+        payments = Array.isArray(data.payments) ? data.payments : [];
+        if (data.settings && typeof data.settings === 'object') {
+          settings = { ...settings, ...data.settings };
+          localStorage.setItem('usahaai_settings', JSON.stringify(settings));
+          applyHideDemoVisibility();
+          applyToggle('toggleAutoOcr', settings.autoOcr !== false);
+          applyToggle('toggleAutoInsight', !!settings.autoInsight);
+          applyToggle('toggleNotif', settings.notif !== false);
+        }
+        try {
+          localStorage.setItem('usahaai_debts', JSON.stringify(debts));
+          localStorage.setItem('usahaai_payments', JSON.stringify(payments));
+        } catch(e){}
+        updateNavBadge();
+        renderDashboard();
+        updateSyncIndicator('synced');
+      });
+    } catch (err) {
+      console.error('Cloud load failed:', err);
+      showToast('Gagal memuat data cloud — pakai data lokal','error');
+      updateSyncIndicator('error');
+    }
+
+    refreshUserMenuUI();
+    updateNavBadge();
+    renderDashboard();
+    bootAppPostAuth();
+  } else {
+    // Signed out
+    currentUser = null;
+    if (window.cloudUnsubscribe) window.cloudUnsubscribe();
+    // Cek choice tersimpan
+    const choice = localStorage.getItem('usahaai_auth_choice');
+    if (choice === 'guest') {
+      authMode = 'guest';
+      hideAuthScreen();
+      refreshUserMenuUI();
+      updateSyncIndicator('synced');
+    } else if (window.__FIREBASE_ENABLED__) {
+      // Belum login & belum pilih tamu → show auth
+      showAuthScreen('login');
+    } else {
+      // Firebase tidak aktif → mode tamu default
+      authMode = 'guest';
+      hideAuthScreen();
+      refreshUserMenuUI();
+    }
+  }
+}
+window.__onAuthStateChanged__ = handleAuthStateChange;
+
+// ============================================================
+// ====== INIT / BOOT =========================================
+// ============================================================
+let _appBooted = false;
+
+function bootApp() {
+  // Yang dijalankan SEKALI saja, tidak peduli mode auth
+  if (_appBooted) return;
+  _appBooted = true;
+  try {
+    loadData(); // localStorage load — cloud sync (jika ada) akan overwrite di handleAuthStateChange
     const dateEl = document.getElementById('currentDate');
     if (dateEl) dateEl.textContent = new Date().toLocaleDateString('id-ID',{weekday:'short',day:'numeric',month:'short',year:'numeric'});
     const fTgl = document.getElementById('fTanggal');
@@ -3997,12 +4734,68 @@ function init() {
     // Init payment rows
     const container = document.getElementById('paymentRowsContainer');
     if(container && !container.children.length) addPaymentRow();
+    applyHideDemoVisibility();
     renderDashboard();
     updateAiBadges();
-    if(!debts.length) {
+    refreshUserMenuUI();
+    updateSyncIndicator(authMode === 'guest' ? 'synced' : 'syncing');
+
+    // Tip demo (hanya kalau tidak disembunyikan)
+    if(!debts.length && !(settings && settings.hideDemo)) {
       setTimeout(()=>{
         showToast('💡 Klik "Load Demo Data" di Settings untuk mencoba fitur!','info');
       }, 1500);
+    }
+  } catch (e) {
+    console.error('Boot failed:', e);
+    showToast('Inisialisasi gagal: '+(e.message||'error'),'error');
+  }
+}
+
+function bootAppPostAuth() {
+  // Refresh setelah cloud data terload
+  applyHideDemoVisibility();
+  applyToggle('toggleAutoOcr', settings.autoOcr !== false);
+  applyToggle('toggleAutoInsight', !!settings.autoInsight);
+  applyToggle('toggleNotif', settings.notif !== false);
+}
+
+function init() {
+  try {
+    // Boot UI dasar dulu (load localStorage)
+    bootApp();
+
+    // Tentukan auth flow
+    if (window.__FIREBASE_ENABLED__) {
+      const choice = localStorage.getItem('usahaai_auth_choice');
+      // Kalau sudah ada user pending dari onAuthStateChanged sebelum init
+      if (window.__pendingAuthFlag__) {
+        handleAuthStateChange(window.__pendingAuthUser__);
+        window.__pendingAuthFlag__ = false;
+        window.__pendingAuthUser__ = null;
+      } else if (choice === 'guest') {
+        authMode = 'guest';
+        refreshUserMenuUI();
+        updateSyncIndicator('synced');
+      } else if (choice === 'cloud') {
+        // Sedang menunggu onAuthStateChanged callback — show loader/auth
+        // Beri waktu 1.5s; kalau ga ada user, show auth screen
+        setTimeout(() => {
+          if (!currentUser && !window.__pendingAuthFlag__) {
+            showAuthScreen('login');
+          }
+        }, 1500);
+      } else {
+        // Pertama kali → tampilkan auth
+        setTimeout(() => {
+          if (!currentUser) showAuthScreen('login');
+        }, 300);
+      }
+    } else {
+      // Firebase tidak diaktifkan → langsung mode tamu (= behavior lama)
+      authMode = 'guest';
+      refreshUserMenuUI();
+      updateSyncIndicator('synced');
     }
   } catch (e) {
     console.error('Init failed:', e);
