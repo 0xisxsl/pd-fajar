@@ -3446,7 +3446,7 @@ Sekarang baca gambar faktur dan balas HANYA dengan JSON tersebut.`;
 
     const text = await callAI({
       messages: [{ role: 'user', content: promptText }],
-      maxTokens: 1000,
+      maxTokens: 2000,
       imageB64: imageData,
       imageMime: mimeType
     });
@@ -3502,19 +3502,44 @@ function extractJson(raw) {
   if (start === -1) throw new Error('tidak ada objek JSON ditemukan');
 
   let depth = 0, inStr = false, escape = false, end = -1;
+  let lastSafeComma = -1; // posisi comma terakhir di depth 1 (untuk repair JSON terpotong)
   for (let i = start; i < s.length; i++) {
     const ch = s[i];
     if (escape) { escape = false; continue; }
-    if (ch === '\\') { escape = true; continue; }
-    if (ch === '"') { inStr = !inStr; continue; }
-    if (inStr) continue;
+    if (inStr) {
+      if (ch === '\\') { escape = true; continue; }
+      if (ch === '"') inStr = false;
+      continue;
+    }
+    if (ch === '"') { inStr = true; continue; }
     if (ch === '{') depth++;
     else if (ch === '}') {
       depth--;
       if (depth === 0) { end = i; break; }
     }
+    else if (ch === ',' && depth === 1) {
+      lastSafeComma = i;
+    }
   }
-  if (end === -1) throw new Error('objek JSON tidak lengkap (brace tidak seimbang)');
+
+  // 4a. Repair JSON terpotong (mis. AI kehabisan max_tokens di tengah respons).
+  // Strategi: kalau JSON tidak lengkap tapi ada minimal 1 pasangan key:value lengkap
+  // sebelum titik potong (ditandai comma terakhir di depth 1), potong sampai sana lalu close `}`.
+  if (end === -1) {
+    if (lastSafeComma > start) {
+      // Truncate di lastSafeComma (buang comma + sisa yang terpotong), close brace.
+      let candidate = s.slice(start, lastSafeComma) + '}';
+      candidate = candidate
+        .replace(/[\u201C\u201D]/g, '"')
+        .replace(/[\u2018\u2019]/g, "'");
+      try {
+        const parsed = JSON.parse(candidate);
+        console.warn('[OCR] JSON terpotong dari AI, berhasil di-repair menjadi:', candidate);
+        return parsed;
+      } catch (_) { /* fall through ke error */ }
+    }
+    throw new Error('objek JSON tidak lengkap (respons AI terpotong / brace tidak seimbang)');
+  }
 
   let candidate = s.slice(start, end + 1);
 
