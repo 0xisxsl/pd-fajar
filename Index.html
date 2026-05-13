@@ -228,6 +228,41 @@ select.form-control{background-image:url("data:image/svg+xml,%3Csvg xmlns='http:
 .ocr-field-value{font-weight:600;color:var(--text);font-family:var(--font-mono);}
 .ocr-confidence{font-size:10px;color:var(--green);background:#ECFDF5;padding:2px 8px;border-radius:10px;margin-left:8px;}
 
+/* NAV GROUP (Collapsible parent + sub-items) */
+.nav-group{display:flex;flex-direction:column;}
+.nav-parent .nav-chevron{margin-left:auto;transition:transform .25s cubic-bezier(.4,0,.2,1);opacity:.6;}
+.nav-group.open .nav-parent .nav-chevron{transform:rotate(180deg);opacity:1;}
+.nav-group.has-active-child .nav-parent{color:rgba(255,255,255,.95);background:rgba(255,255,255,.04);}
+.nav-sub{max-height:0;overflow:hidden;transition:max-height .3s cubic-bezier(.4,0,.2,1);padding-left:14px;}
+.nav-group.open .nav-sub{max-height:200px;}
+.nav-subitem{padding:9px 14px 9px 28px !important;font-size:13px !important;margin:1px 8px !important;position:relative;}
+.nav-subitem::before{content:'';position:absolute;left:16px;top:0;bottom:0;width:1px;background:rgba(255,255,255,.08);}
+.nav-subitem.active::before{background:var(--accent);width:2px;}
+.nav-sub-dot{width:7px;height:7px;border-radius:50%;display:inline-block;flex-shrink:0;box-shadow:0 0 0 2px rgba(255,255,255,.06);}
+
+/* FORM TYPE TABS (in-page switcher) */
+.form-type-tabs{display:flex;gap:6px;background:white;padding:6px;border-radius:14px;border:1px solid var(--border);margin-bottom:14px;}
+.form-type-tab{flex:1;padding:11px 14px;background:transparent;border:none;border-radius:10px;cursor:pointer;font-family:var(--font-body);font-size:13.5px;font-weight:600;color:var(--text2);transition:all .2s;display:flex;align-items:center;justify-content:center;gap:8px;}
+.form-type-tab:hover{background:#F8FAFC;color:var(--text);}
+.form-type-tab.active.tab-faktur{background:linear-gradient(135deg,#F5F3FF 0%,#EDE9FE 100%);color:#5B21B6;box-shadow:0 1px 3px rgba(91,33,182,.12);}
+.form-type-tab.active.tab-giro{background:linear-gradient(135deg,#EFF6FF 0%,#DBEAFE 100%);color:#1E40AF;box-shadow:0 1px 3px rgba(30,64,175,.12);}
+.form-type-tab .tab-dot{width:9px;height:9px;border-radius:50%;}
+.form-type-tab.tab-faktur .tab-dot{background:#8B5CF6;}
+.form-type-tab.tab-giro .tab-dot{background:#3B82F6;}
+
+/* TYPE BANNER (header strip per page) */
+.type-banner{display:flex;align-items:center;gap:14px;padding:14px 18px;border-radius:14px;margin-bottom:14px;border:1px solid;}
+.type-banner-faktur{background:linear-gradient(135deg,#F5F3FF 0%,#FFFFFF 100%);border-color:#DDD6FE;}
+.type-banner-giro{background:linear-gradient(135deg,#EFF6FF 0%,#FFFFFF 100%);border-color:#BFDBFE;}
+.type-banner-icon{width:42px;height:42px;border-radius:11px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.type-banner-faktur .type-banner-icon{background:linear-gradient(135deg,#8B5CF6,#7C3AED);color:white;}
+.type-banner-giro .type-banner-icon{background:linear-gradient(135deg,#3B82F6,#2563EB);color:white;}
+.type-banner-title{font-family:var(--font-head);font-size:15px;font-weight:700;color:var(--text);line-height:1.2;}
+.type-banner-sub{font-size:12px;color:var(--text2);margin-top:2px;}
+
+/* Giro-specific form accent — bank field */
+.giro-bank-select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2394A3B8' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;padding-right:36px;appearance:none;}
+
 /* AI INSIGHT */
 .insight-card{background:linear-gradient(135deg,var(--navy) 0%,var(--navy3) 100%);border-radius:16px;padding:24px;color:white;margin-bottom:16px;}
 .insight-header{display:flex;align-items:center;gap:10px;margin-bottom:16px;}
@@ -704,10 +739,23 @@ button:focus-visible,.qa-btn:focus-visible,.export-card:focus-visible,.nav-item:
       <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
       Dashboard
     </button>
-    <button type="button" class="nav-item" data-page="tambah" onclick="navigateTo('tambah')">
-      <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
-      Tambah &amp; Edit Hutang
-    </button>
+    <div class="nav-group" id="navGroupTambah">
+      <button type="button" class="nav-item nav-parent" onclick="toggleNavGroup('Tambah')">
+        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+        Tambah &amp; Edit Hutang
+        <svg class="nav-chevron" width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+      </button>
+      <div class="nav-sub">
+        <button type="button" class="nav-item nav-subitem" data-page="tambah-faktur" onclick="navigateTo('tambah-faktur')">
+          <span class="nav-sub-dot" style="background:#8B5CF6;"></span>
+          Hutang Faktur
+        </button>
+        <button type="button" class="nav-item nav-subitem" data-page="tambah-giro" onclick="navigateTo('tambah-giro')">
+          <span class="nav-sub-dot" style="background:#3B82F6;"></span>
+          Hutang Giro
+        </button>
+      </div>
+    </div>
     <button type="button" class="nav-item" data-page="daftar" onclick="navigateTo('daftar')">
       <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
       Daftar Hutang
@@ -893,102 +941,268 @@ button:focus-visible,.qa-btn:focus-visible,.export-card:focus-visible,.nav-item:
 
   </div>
 
-  <!-- PAGE: TAMBAH HUTANG -->
-  <div class="page fade-in" id="page-tambah">
+  <!-- ==========================================================
+       PAGE: TAMBAH HUTANG FAKTUR
+       ========================================================== -->
+  <div class="page fade-in" id="page-tambah-faktur">
+
+    <!-- Type switcher tabs -->
+    <div class="form-type-tabs" role="tablist" aria-label="Pilih tipe hutang">
+      <button class="form-type-tab tab-faktur active" role="tab" aria-selected="true" onclick="navigateTo('tambah-faktur')">
+        <span class="tab-dot"></span>
+        Hutang Faktur
+      </button>
+      <button class="form-type-tab tab-giro" role="tab" aria-selected="false" onclick="navigateTo('tambah-giro')">
+        <span class="tab-dot"></span>
+        Hutang Giro
+      </button>
+    </div>
+
+    <!-- Banner header -->
+    <div class="type-banner type-banner-faktur">
+      <div class="type-banner-icon">
+        <svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+      </div>
+      <div style="flex:1;">
+        <div class="type-banner-title">Faktur / Invoice</div>
+        <div class="type-banner-sub">Input tagihan faktur dari supplier — upload foto / PDF untuk OCR otomatis</div>
+      </div>
+    </div>
+
     <div class="grid-2">
-      <!-- OCR Section -->
+      <!-- OCR & Preview kolom kiri -->
       <div>
         <div class="card" style="margin-bottom:16px;">
           <div class="card-header">
-            <div class="card-title">📄 OCR AI Reader</div>
-            <span id="ocrBadge" style="font-size:11px;color:var(--text3);background:var(--bg);padding:4px 10px;border-radius:20px;">Powered by AI</span>
+            <div class="card-title">📄 OCR Faktur</div>
+            <span id="ocrBadgeFaktur" style="font-size:11px;color:var(--text3);background:var(--bg);padding:4px 10px;border-radius:20px;">Powered by AI</span>
           </div>
           <div class="card-body">
-            <div class="upload-zone" id="uploadZone" onclick="document.getElementById('fileInput').click()" ondragover="handleDragOver(event)" ondrop="handleDrop(event)">
+            <div class="upload-zone" id="uploadZoneFaktur"
+                 onclick="document.getElementById('fileInputFaktur').click()"
+                 ondragover="handleDragOver(event,'faktur')"
+                 ondragleave="handleDragLeave(event,'faktur')"
+                 ondrop="handleDrop(event,'faktur')">
               <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/></svg>
-              <p>Klik atau drag foto / PDF faktur</p>
+              <p>Klik atau drag foto / PDF <strong>Faktur</strong></p>
               <small>JPG, PNG, PDF — Maks 10MB</small>
             </div>
-            <input type="file" id="fileInput" accept="image/*,.pdf" style="display:none" onchange="handleFileSelect(event)">
-            <div id="ocrPreviewWrap" style="display:none;margin-top:16px;">
+            <input type="file" id="fileInputFaktur" accept="image/*,.pdf" style="display:none" onchange="handleFileSelect(event,'faktur')">
+            <div id="ocrPreviewWrapFaktur" style="display:none;margin-top:16px;">
               <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
                 <span style="font-size:13px;font-weight:600;color:var(--green);">✓ OCR Berhasil Membaca Faktur</span>
-                <button class="btn btn-sm btn-outline" onclick="applyOcrToForm()">Terapkan ke Form →</button>
+                <button class="btn btn-sm btn-outline" onclick="applyOcrToForm('faktur')">Terapkan ke Form →</button>
               </div>
-              <div class="ocr-preview" id="ocrPreview"></div>
+              <div class="ocr-preview" id="ocrPreviewFaktur"></div>
             </div>
           </div>
         </div>
 
         <div class="card">
-          <div class="card-header"><div class="card-title">🖼 Preview Dokumen</div></div>
+          <div class="card-header"><div class="card-title">🖼 Preview Dokumen Faktur</div></div>
           <div class="card-body" style="text-align:center;">
-            <div id="docPreviewWrap" style="color:var(--text3);font-size:13px;padding:24px;">
+            <div id="docPreviewWrapFaktur" style="color:var(--text3);font-size:13px;padding:24px;">
               <svg width="40" height="40" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" style="margin-bottom:8px;opacity:.4;"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
-              <div>Preview dokumen muncul di sini</div>
+              <div>Preview faktur muncul di sini</div>
             </div>
           </div>
         </div>
       </div>
 
-      <!-- Form Section -->
+      <!-- Form Faktur kolom kanan -->
       <div class="card">
         <div class="card-header">
-          <div class="card-title" id="formTitle">➕ Tambah Hutang Baru</div>
-          <button class="btn btn-sm btn-outline" onclick="resetForm()" id="resetBtn">Reset</button>
+          <div class="card-title" id="formTitleFaktur">➕ Tambah Hutang Faktur Baru</div>
+          <button class="btn btn-sm btn-outline" onclick="resetForm('faktur')">Reset</button>
         </div>
         <div class="card-body">
-          <input type="hidden" id="editId">
+          <input type="hidden" id="editIdFaktur">
+          <input type="hidden" id="fTypeFaktur" value="faktur">
+          <div class="form-group">
+            <label class="form-label" for="fSupplierFaktur">Nama Supplier</label>
+            <input type="text" class="form-control" id="fSupplierFaktur" placeholder="Contoh: PT. Maju Bersama" autocomplete="off" required>
+          </div>
           <div class="form-row">
             <div class="form-group">
-              <label class="form-label">Tipe</label>
-              <select class="form-control" id="fType">
-                <option value="faktur">Faktur</option>
-                <option value="giro">Giro</option>
-              </select>
+              <label class="form-label" for="fNoFakturFaktur">No. Faktur</label>
+              <input type="text" class="form-control" id="fNoFakturFaktur" placeholder="INV-2024-001" autocomplete="off">
             </div>
             <div class="form-group">
-              <label class="form-label">Status</label>
-              <select class="form-control" id="fStatus">
-                <option value="belum">Belum Lunas</option>
-                <option value="lunas">Lunas</option>
-              </select>
+              <label class="form-label" for="fNominalFaktur">Nominal (Rp)</label>
+              <input type="number" class="form-control" id="fNominalFaktur" placeholder="0" min="0" step="any" inputmode="numeric" required>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label" for="fTanggalFaktur">Tanggal Faktur</label>
+              <input type="date" class="form-control" id="fTanggalFaktur" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="fJatuhTempoFaktur">Jatuh Tempo</label>
+              <input type="date" class="form-control" id="fJatuhTempoFaktur" required>
             </div>
           </div>
           <div class="form-group">
-            <label class="form-label" for="fSupplier">Nama Supplier</label>
-            <input type="text" class="form-control" id="fSupplier" placeholder="Contoh: PT. Maju Bersama" autocomplete="off" required>
-          </div>
-          <div class="form-row">
-            <div class="form-group">
-              <label class="form-label" for="fNominal">Nominal (Rp)</label>
-              <input type="number" class="form-control" id="fNominal" placeholder="0" min="0" step="any" inputmode="numeric" required>
-            </div>
-            <div class="form-group">
-              <label class="form-label" for="fNoFaktur">No. Faktur / Giro</label>
-              <input type="text" class="form-control" id="fNoFaktur" placeholder="INV-2024-001" autocomplete="off">
-            </div>
-          </div>
-          <div class="form-row">
-            <div class="form-group">
-              <label class="form-label" for="fTanggal">Tanggal Faktur</label>
-              <input type="date" class="form-control" id="fTanggal" required>
-            </div>
-            <div class="form-group">
-              <label class="form-label" for="fJatuhTempo">Jatuh Tempo</label>
-              <input type="date" class="form-control" id="fJatuhTempo" required>
-            </div>
+            <label class="form-label" for="fStatusFaktur">Status</label>
+            <select class="form-control" id="fStatusFaktur">
+              <option value="belum">Belum Lunas</option>
+              <option value="lunas">Lunas</option>
+            </select>
           </div>
           <div class="form-group">
-            <label class="form-label">Keterangan</label>
-            <textarea class="form-control" id="fKeterangan" rows="3" placeholder="Catatan tambahan..."></textarea>
+            <label class="form-label" for="fKeteranganFaktur">Keterangan</label>
+            <textarea class="form-control" id="fKeteranganFaktur" rows="3" placeholder="Catatan tambahan, no. PO, dll..."></textarea>
           </div>
           <div style="display:flex;gap:10px;margin-top:8px;">
-            <button class="btn btn-primary" style="flex:1;" onclick="saveDebt()">
+            <button class="btn btn-primary" style="flex:1;" onclick="saveDebt('faktur')">
               <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" width="16" height="16"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
-              Simpan Hutang
+              Simpan Hutang Faktur
             </button>
-            <button class="btn btn-outline" onclick="resetForm()">Batal</button>
+            <button class="btn btn-outline" onclick="resetForm('faktur')">Batal</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================================
+       PAGE: TAMBAH HUTANG GIRO
+       ========================================================== -->
+  <div class="page fade-in" id="page-tambah-giro">
+
+    <!-- Type switcher tabs -->
+    <div class="form-type-tabs" role="tablist" aria-label="Pilih tipe hutang">
+      <button class="form-type-tab tab-faktur" role="tab" aria-selected="false" onclick="navigateTo('tambah-faktur')">
+        <span class="tab-dot"></span>
+        Hutang Faktur
+      </button>
+      <button class="form-type-tab tab-giro active" role="tab" aria-selected="true" onclick="navigateTo('tambah-giro')">
+        <span class="tab-dot"></span>
+        Hutang Giro
+      </button>
+    </div>
+
+    <!-- Banner header -->
+    <div class="type-banner type-banner-giro">
+      <div class="type-banner-icon">
+        <svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="6" width="18" height="13" rx="2"/><path stroke-linecap="round" d="M3 10h18M7 15h4"/></svg>
+      </div>
+      <div style="flex:1;">
+        <div class="type-banner-title">Giro / Cek Mundur</div>
+        <div class="type-banner-sub">Input giro yang diterbitkan / diterima — OCR khusus mengenali bank, no. giro, & tgl jatuh tempo cair</div>
+      </div>
+    </div>
+
+    <div class="grid-2">
+      <!-- OCR & Preview kolom kiri -->
+      <div>
+        <div class="card" style="margin-bottom:16px;">
+          <div class="card-header">
+            <div class="card-title">🏦 OCR Giro</div>
+            <span id="ocrBadgeGiro" style="font-size:11px;color:var(--text3);background:var(--bg);padding:4px 10px;border-radius:20px;">Powered by AI</span>
+          </div>
+          <div class="card-body">
+            <div class="upload-zone" id="uploadZoneGiro"
+                 onclick="document.getElementById('fileInputGiro').click()"
+                 ondragover="handleDragOver(event,'giro')"
+                 ondragleave="handleDragLeave(event,'giro')"
+                 ondrop="handleDrop(event,'giro')">
+              <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/></svg>
+              <p>Klik atau drag foto <strong>Giro / Cek</strong></p>
+              <small>JPG, PNG, PDF — Maks 10MB</small>
+            </div>
+            <input type="file" id="fileInputGiro" accept="image/*,.pdf" style="display:none" onchange="handleFileSelect(event,'giro')">
+            <div id="ocrPreviewWrapGiro" style="display:none;margin-top:16px;">
+              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
+                <span style="font-size:13px;font-weight:600;color:var(--green);">✓ OCR Berhasil Membaca Giro</span>
+                <button class="btn btn-sm btn-outline" onclick="applyOcrToForm('giro')">Terapkan ke Form →</button>
+              </div>
+              <div class="ocr-preview" id="ocrPreviewGiro"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header"><div class="card-title">🖼 Preview Dokumen Giro</div></div>
+          <div class="card-body" style="text-align:center;">
+            <div id="docPreviewWrapGiro" style="color:var(--text3);font-size:13px;padding:24px;">
+              <svg width="40" height="40" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" style="margin-bottom:8px;opacity:.4;"><rect x="3" y="6" width="18" height="13" rx="2"/><path stroke-linecap="round" d="M3 10h18M7 15h4"/></svg>
+              <div>Preview giro muncul di sini</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Form Giro kolom kanan -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title" id="formTitleGiro">➕ Tambah Hutang Giro Baru</div>
+          <button class="btn btn-sm btn-outline" onclick="resetForm('giro')">Reset</button>
+        </div>
+        <div class="card-body">
+          <input type="hidden" id="editIdGiro">
+          <input type="hidden" id="fTypeGiro" value="giro">
+          <div class="form-group">
+            <label class="form-label" for="fSupplierGiro">Nama Supplier / Penerima</label>
+            <input type="text" class="form-control" id="fSupplierGiro" placeholder="Contoh: PT. Maju Bersama" autocomplete="off" required>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label" for="fNoFakturGiro">No. Giro / Cek</label>
+              <input type="text" class="form-control" id="fNoFakturGiro" placeholder="BCA-0123456" autocomplete="off">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="fBankGiro">Bank Penerbit</label>
+              <select class="form-control giro-bank-select" id="fBankGiro">
+                <option value="">— Pilih Bank —</option>
+                <option value="BCA">BCA</option>
+                <option value="BRI">BRI</option>
+                <option value="BNI">BNI</option>
+                <option value="Mandiri">Mandiri</option>
+                <option value="BTN">BTN</option>
+                <option value="CIMB Niaga">CIMB Niaga</option>
+                <option value="Danamon">Danamon</option>
+                <option value="Permata">Permata</option>
+                <option value="OCBC NISP">OCBC NISP</option>
+                <option value="Panin">Panin</option>
+                <option value="Maybank">Maybank</option>
+                <option value="BSI">BSI</option>
+                <option value="Mega">Mega</option>
+                <option value="Lainnya">Lainnya</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="fNominalGiro">Nominal Giro (Rp)</label>
+            <input type="number" class="form-control" id="fNominalGiro" placeholder="0" min="0" step="any" inputmode="numeric" required>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label" for="fTanggalGiro">Tanggal Terbit</label>
+              <input type="date" class="form-control" id="fTanggalGiro" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="fJatuhTempoGiro">Tanggal Cair</label>
+              <input type="date" class="form-control" id="fJatuhTempoGiro" required>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="fStatusGiro">Status</label>
+            <select class="form-control" id="fStatusGiro">
+              <option value="belum">Belum Cair</option>
+              <option value="lunas">Sudah Cair / Lunas</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="fKeteranganGiro">Keterangan</label>
+            <textarea class="form-control" id="fKeteranganGiro" rows="3" placeholder="Catatan tambahan, no. rekening, dll..."></textarea>
+          </div>
+          <div style="display:flex;gap:10px;margin-top:8px;">
+            <button class="btn btn-primary" style="flex:1;" onclick="saveDebt('giro')">
+              <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" width="16" height="16"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+              Simpan Hutang Giro
+            </button>
+            <button class="btn btn-outline" onclick="resetForm('giro')">Batal</button>
           </div>
         </div>
       </div>
@@ -1917,6 +2131,7 @@ let settings = {};
 let cicilanTabFilter = 'semua';
 let currentWeekOffset = 0;
 let ocrData = null;
+let currentOcrMode = null; // 'faktur' | 'giro' | null — menandai konteks OCR terakhir
 let chatHistory = [];
 let supplierList = [];
 let paymentRowCount = 0;
@@ -2272,7 +2487,9 @@ async function callAI({ messages, system, maxTokens = 1000, imageB64 = null, ima
 // ====== NAVIGATION ======
 const pageConfig = {
   dashboard: {title:'Dashboard', sub:'Ringkasan keuangan bisnis Anda'},
-  tambah: {title:'Tambah & Edit Hutang', sub:'Input faktur manual atau via OCR AI'},
+  tambah: {title:'Tambah & Edit Hutang', sub:'Input faktur manual atau via OCR AI'}, // legacy alias
+  'tambah-faktur': {title:'Tambah & Edit Hutang Faktur', sub:'Input faktur supplier manual atau via OCR AI'},
+  'tambah-giro': {title:'Tambah & Edit Hutang Giro', sub:'Input giro / cek mundur manual atau via OCR AI'},
   daftar: {title:'Daftar Hutang', sub:'Kelola semua data hutang'},
   kalender: {title:'Kalender Mingguan', sub:'Jadwal jatuh tempo mingguan'},
   insight: {title:'AI Insight', sub:'Analisa keuangan cerdas berbasis AI'},
@@ -2281,7 +2498,16 @@ const pageConfig = {
   settings: {title:'Pengaturan', sub:'Konfigurasi aplikasi dan AI'}
 };
 
+// Toggle the collapsible sidebar group (e.g. "Tambah & Edit Hutang")
+function toggleNavGroup(name) {
+  const grp = document.getElementById('navGroup' + name);
+  if (!grp) return;
+  grp.classList.toggle('open');
+}
+
 function navigateTo(page) {
+  // Legacy alias: 'tambah' → default ke faktur
+  if (page === 'tambah') page = 'tambah-faktur';
   if (!pageConfig[page]) { console.warn('Unknown page:', page); return; }
   const target = document.getElementById('page-' + page);
   if (!target) return;
@@ -2298,6 +2524,14 @@ function navigateTo(page) {
   // Robust active-nav matching via data-page (avoids fragile onclick parsing)
   document.querySelectorAll('.nav-item[data-page="' + page + '"]').forEach(n => n.classList.add('active'));
 
+  // Auto-expand parent group jika halaman aktif adalah sub-item
+  const tambahGroup = document.getElementById('navGroupTambah');
+  if (tambahGroup) {
+    const isTambahChild = page === 'tambah-faktur' || page === 'tambah-giro';
+    tambahGroup.classList.toggle('has-active-child', isTambahChild);
+    if (isTambahChild) tambahGroup.classList.add('open');
+  }
+
   try {
     if (page === 'dashboard') renderDashboard();
     if (page === 'daftar')    renderDebtList();
@@ -2305,7 +2539,7 @@ function navigateTo(page) {
     if (page === 'insight')   { renderInsightStats(); updateAiBadges(); }
     if (page === 'settings')  updateSettingsInfo();
     if (page === 'pelunasan') renderPelunasanPage();
-    if (page === 'tambah')    updateAiBadges();
+    if (page === 'tambah-faktur' || page === 'tambah-giro') updateAiBadges();
   } catch (e) {
     console.error('Render error for page', page, e);
     showToast('Terjadi error saat memuat halaman', 'error');
@@ -2315,6 +2549,12 @@ function navigateTo(page) {
 
 function updateAiBadges() {
   const label = getAiProviderLabel();
+  // Dua badge OCR — Faktur & Giro (masing-masing sub-page)
+  const ocrBadgeFaktur = document.getElementById('ocrBadgeFaktur');
+  if(ocrBadgeFaktur) ocrBadgeFaktur.textContent = 'Powered by ' + label;
+  const ocrBadgeGiro = document.getElementById('ocrBadgeGiro');
+  if(ocrBadgeGiro) ocrBadgeGiro.textContent = 'Powered by ' + label;
+  // Legacy badge (jaga2 kalau masih ada)
   const ocrBadge = document.getElementById('ocrBadge');
   if(ocrBadge) ocrBadge.textContent = 'Powered by ' + label;
   const insightSub = document.getElementById('insightProviderSub');
@@ -2624,52 +2864,92 @@ function updateNavBadge() {
 }
 
 // ====== DEBT FORM ======
-function resetForm() {
-  document.getElementById('editId').value='';
-  document.getElementById('fType').value='faktur';
-  document.getElementById('fStatus').value='belum';
-  document.getElementById('fSupplier').value='';
-  document.getElementById('fNominal').value='';
-  document.getElementById('fNoFaktur').value='';
-  document.getElementById('fTanggal').value=new Date().toISOString().split('T')[0];
-  document.getElementById('fJatuhTempo').value='';
-  document.getElementById('fKeterangan').value='';
-  document.getElementById('formTitle').textContent='➕ Tambah Hutang Baru';
-  ocrData = null;
-  document.getElementById('ocrPreviewWrap').style.display='none';
-  document.getElementById('docPreviewWrap').innerHTML=`<svg width="40" height="40" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" style="margin-bottom:8px;opacity:.4;"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg><div>Preview dokumen muncul di sini</div>`;
+// ====== HELPERS: Mode-aware form ID resolver ======
+// Setiap form (faktur & giro) memakai suffix pada ID DOM-nya.
+// suffix() mengembalikan suffix yang sesuai supaya satu set fungsi bisa melayani keduanya.
+function _suffix(mode) {
+  return mode === 'giro' ? 'Giro' : 'Faktur';
+}
+function _fEl(mode, base) {
+  return document.getElementById(base + _suffix(mode));
 }
 
-function saveDebt() {
-  const supplier = document.getElementById('fSupplier').value.trim();
-  const nominal = parseFloat(document.getElementById('fNominal').value);
-  const tanggal = document.getElementById('fTanggal').value;
-  const jatuhTempo = document.getElementById('fJatuhTempo').value;
+function resetForm(mode) {
+  mode = mode === 'giro' ? 'giro' : 'faktur';
+  const sx = _suffix(mode);
+  const set = (id, val) => { const el = document.getElementById(id + sx); if (el) el.value = val; };
+  set('editId', '');
+  set('fStatus', 'belum');
+  set('fSupplier', '');
+  set('fNominal', '');
+  set('fNoFaktur', '');
+  set('fTanggal', new Date().toISOString().split('T')[0]);
+  set('fJatuhTempo', '');
+  set('fKeterangan', '');
+  if (mode === 'giro') set('fBank', '');
+  const titleEl = document.getElementById('formTitle' + sx);
+  if (titleEl) titleEl.textContent = mode === 'giro' ? '➕ Tambah Hutang Giro Baru' : '➕ Tambah Hutang Faktur Baru';
+  // OCR & preview reset
+  ocrData = null;
+  currentOcrMode = null;
+  const prevWrap = document.getElementById('ocrPreviewWrap' + sx);
+  if (prevWrap) prevWrap.style.display = 'none';
+  const docWrap = document.getElementById('docPreviewWrap' + sx);
+  if (docWrap) {
+    if (mode === 'giro') {
+      docWrap.innerHTML = `<svg width="40" height="40" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" style="margin-bottom:8px;opacity:.4;"><rect x="3" y="6" width="18" height="13" rx="2"/><path stroke-linecap="round" d="M3 10h18M7 15h4"/></svg><div>Preview giro muncul di sini</div>`;
+    } else {
+      docWrap.innerHTML = `<svg width="40" height="40" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" style="margin-bottom:8px;opacity:.4;"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg><div>Preview faktur muncul di sini</div>`;
+    }
+  }
+}
+
+function saveDebt(mode) {
+  mode = mode === 'giro' ? 'giro' : 'faktur';
+  const sx = _suffix(mode);
+  const get = (id) => { const el = document.getElementById(id + sx); return el ? el.value : ''; };
+
+  const supplier = (get('fSupplier') || '').trim();
+  const nominal = parseFloat(get('fNominal'));
+  const tanggal = get('fTanggal');
+  const jatuhTempo = get('fJatuhTempo');
 
   if (!supplier) { showToast('Nama supplier wajib diisi', 'error'); return; }
   if (!nominal || nominal <= 0 || !Number.isFinite(nominal)) {
     showToast('Nominal harus lebih besar dari 0', 'error'); return;
   }
-  if (!jatuhTempo) { showToast('Tanggal jatuh tempo wajib diisi', 'error'); return; }
+  if (!jatuhTempo) {
+    showToast(mode === 'giro' ? 'Tanggal cair giro wajib diisi' : 'Tanggal jatuh tempo wajib diisi', 'error'); return;
+  }
   if (tanggal && jatuhTempo && new Date(jatuhTempo) < new Date(tanggal)) {
-    showToast('Jatuh tempo tidak boleh sebelum tanggal faktur', 'error'); return;
+    showToast(mode === 'giro'
+      ? 'Tanggal cair tidak boleh sebelum tanggal terbit giro'
+      : 'Jatuh tempo tidak boleh sebelum tanggal faktur', 'error'); return;
+  }
+  // Giro: minta bank
+  if (mode === 'giro') {
+    const bank = (get('fBank') || '').trim();
+    if (!bank) { showToast('Bank penerbit giro wajib dipilih', 'error'); return; }
   }
 
-  const editId = document.getElementById('editId').value;
+  const editId = get('editId');
   const existing = editId ? debts.find(d => d.id === editId) : null;
   const debt = {
     id: editId || uid(),
-    type: document.getElementById('fType').value,
-    status: document.getElementById('fStatus').value,
+    type: mode, // 'faktur' atau 'giro'
+    status: get('fStatus') || 'belum',
     supplier,
     nominal,
-    noFaktur: document.getElementById('fNoFaktur').value.trim(),
+    noFaktur: (get('fNoFaktur') || '').trim(),
     tanggal: tanggal,
     jatuhTempo,
-    keterangan: document.getElementById('fKeterangan').value.trim(),
+    keterangan: (get('fKeterangan') || '').trim(),
     createdAt: existing ? existing.createdAt : Date.now(),
     updatedAt: Date.now()
   };
+  if (mode === 'giro') {
+    debt.bank = (get('fBank') || '').trim();
+  }
 
   if (editId) {
     const idx = debts.findIndex(d => d.id === editId);
@@ -2679,25 +2959,31 @@ function saveDebt() {
   }
 
   saveData();
-  showToast(editId ? 'Hutang berhasil diperbarui' : 'Hutang berhasil ditambahkan');
-  resetForm();
+  showToast(editId
+    ? (mode === 'giro' ? 'Hutang giro berhasil diperbarui' : 'Hutang faktur berhasil diperbarui')
+    : (mode === 'giro' ? 'Hutang giro berhasil ditambahkan' : 'Hutang faktur berhasil ditambahkan'));
+  resetForm(mode);
   updateNavBadge();
 }
 
 function editDebt(id) {
   const d = debts.find(x=>x.id===id);
   if(!d) return;
-  document.getElementById('editId').value=d.id;
-  document.getElementById('fType').value=d.type||'faktur';
-  document.getElementById('fStatus').value=d.status||'belum';
-  document.getElementById('fSupplier').value=d.supplier||'';
-  document.getElementById('fNominal').value=d.nominal||'';
-  document.getElementById('fNoFaktur').value=d.noFaktur||'';
-  document.getElementById('fTanggal').value=d.tanggal||'';
-  document.getElementById('fJatuhTempo').value=d.jatuhTempo||'';
-  document.getElementById('fKeterangan').value=d.keterangan||'';
-  document.getElementById('formTitle').textContent='✏️ Edit Hutang';
-  navigateTo('tambah');
+  const mode = (d.type === 'giro') ? 'giro' : 'faktur';
+  const sx = _suffix(mode);
+  const set = (id2, val) => { const el = document.getElementById(id2 + sx); if (el) el.value = val; };
+  set('editId', d.id);
+  set('fStatus', d.status || 'belum');
+  set('fSupplier', d.supplier || '');
+  set('fNominal', d.nominal || '');
+  set('fNoFaktur', d.noFaktur || '');
+  set('fTanggal', d.tanggal || '');
+  set('fJatuhTempo', d.jatuhTempo || '');
+  set('fKeterangan', d.keterangan || '');
+  if (mode === 'giro') set('fBank', d.bank || '');
+  const titleEl = document.getElementById('formTitle' + sx);
+  if (titleEl) titleEl.textContent = mode === 'giro' ? '✏️ Edit Hutang Giro' : '✏️ Edit Hutang Faktur';
+  navigateTo(mode === 'giro' ? 'tambah-giro' : 'tambah-faktur');
 }
 
 function deleteDebt(id) {
@@ -3049,22 +3335,32 @@ function validateFile(file) {
   return null;
 }
 
-function handleDragOver(e) { e.preventDefault(); document.getElementById('uploadZone')?.classList.add('dragover'); }
-function handleDragLeave(e) { e.preventDefault(); document.getElementById('uploadZone')?.classList.remove('dragover'); }
-function handleDrop(e) {
+function handleDragOver(e, mode) {
   e.preventDefault();
-  document.getElementById('uploadZone')?.classList.remove('dragover');
-  const file = e.dataTransfer.files[0];
-  if (file) processFile(file);
+  const id = mode === 'giro' ? 'uploadZoneGiro' : 'uploadZoneFaktur';
+  document.getElementById(id)?.classList.add('dragover');
 }
-function handleFileSelect(e) {
+function handleDragLeave(e, mode) {
+  e.preventDefault();
+  const id = mode === 'giro' ? 'uploadZoneGiro' : 'uploadZoneFaktur';
+  document.getElementById(id)?.classList.remove('dragover');
+}
+function handleDrop(e, mode) {
+  e.preventDefault();
+  const id = mode === 'giro' ? 'uploadZoneGiro' : 'uploadZoneFaktur';
+  document.getElementById(id)?.classList.remove('dragover');
+  const file = e.dataTransfer.files[0];
+  if (file) processFile(file, mode || 'faktur');
+}
+function handleFileSelect(e, mode) {
   const file = e.target.files[0];
-  if (file) processFile(file);
+  if (file) processFile(file, mode || 'faktur');
   // Allow re-selecting the same file
   e.target.value = '';
 }
 
-function processFile(file) {
+function processFile(file, mode) {
+  mode = mode === 'giro' ? 'giro' : 'faktur';
   const err = validateFile(file);
   if (err) { showToast(err, 'error'); return; }
 
@@ -3072,21 +3368,21 @@ function processFile(file) {
   reader.onload = (e) => {
     const b64 = e.target.result;
 
-    // Show preview — escape filename
-    const previewWrap = document.getElementById('docPreviewWrap');
+    // Show preview — escape filename — di kolom preview dokumen sesuai mode
+    const previewWrap = document.getElementById(mode === 'giro' ? 'docPreviewWrapGiro' : 'docPreviewWrapFaktur');
     if (!previewWrap) return;
     if (file.type.startsWith('image/')) {
       const img = document.createElement('img');
       img.src = b64;
       img.style.cssText = 'max-width:100%;border-radius:8px;max-height:250px;object-fit:contain;';
-      img.alt = 'Preview dokumen';
+      img.alt = 'Preview dokumen ' + mode;
       previewWrap.replaceChildren(img);
     } else {
       previewWrap.innerHTML = `<div style="padding:20px;text-align:center;"><svg width="40" height="40" fill="none" stroke="var(--blue)" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg><div style="font-size:13px;color:var(--text2);margin-top:8px;">${esc(file.name)}</div></div>`;
     }
 
     if (settings.autoOcr !== false) {
-      if (getActiveApiKey()) runOCR(b64, file.type);
+      if (getActiveApiKey()) runOCR(b64, file.type, mode);
       else showToast(getAiNoKeyReason(), 'error');
     }
   };
@@ -3094,24 +3390,45 @@ function processFile(file) {
   reader.readAsDataURL(file);
 }
 
-async function runOCR(b64, mimeType) {
+async function runOCR(b64, mimeType, mode) {
+  mode = mode === 'giro' ? 'giro' : 'faktur';
   const info = getActiveApiKey();
   if (!info) { showToast(getAiNoKeyReason(), 'error'); return; }
 
   const isImage = mimeType.startsWith('image/');
   if (!isImage) {
-    // OCR via image endpoint only — PDFs not directly supported by current vision APIs.
     showToast('OCR hanya mendukung gambar (JPG/PNG). Untuk PDF, konversi ke gambar dahulu.', 'error');
     return;
   }
 
-  showLoading(getAiProviderLabel() + ' sedang membaca faktur...');
+  showLoading(getAiProviderLabel() + (mode === 'giro' ? ' sedang membaca giro...' : ' sedang membaca faktur...'));
 
   try {
     const imageData = b64.split(',')[1];
     if (!imageData) throw new Error('Data gambar tidak valid');
 
-    const promptText = `Anda adalah OCR engine. Tugas Anda HANYA mengekstrak data faktur/invoice ke JSON.
+    // Prompt berbeda untuk Faktur vs Giro
+    let promptText;
+    if (mode === 'giro') {
+      promptText = `Anda adalah OCR engine khusus untuk dokumen GIRO / CEK BANK. Tugas Anda HANYA mengekstrak data giro ke JSON.
+
+ATURAN KETAT:
+- Output WAJIB berupa satu objek JSON valid saja, TANPA teks pembuka, TANPA penjelasan, TANPA markdown code fence.
+- Mulai langsung dengan karakter { dan akhiri dengan }
+- Gunakan tepat skema field berikut (case-sensitive).
+- Jika sebuah field tidak ditemukan, gunakan null (bukan string kosong, bukan "-", bukan "N/A").
+- Field "nominal": angka murni tanpa titik/koma/Rp (contoh: 1500000, bukan "Rp 1.500.000").
+- Field "tanggal" (tgl terbit) dan "jatuhTempo" (tgl cair): format YYYY-MM-DD.
+- Field "bank": nama bank penerbit, contoh "BCA", "BRI", "Mandiri", "BNI", dsb.
+- Field "supplier": nama penerima / pihak yang diberi giro (biasanya tertulis di kolom "bayarlah kepada").
+- Field "noFaktur": gunakan untuk NOMOR GIRO / SERIAL GIRO yang tercetak.
+
+Skema:
+{"supplier":string|null,"bank":string|null,"noFaktur":string|null,"nominal":number|null,"tanggal":string|null,"jatuhTempo":string|null,"keterangan":string|null}
+
+Sekarang baca gambar giro dan balas HANYA dengan JSON tersebut.`;
+    } else {
+      promptText = `Anda adalah OCR engine. Tugas Anda HANYA mengekstrak data faktur/invoice ke JSON.
 
 ATURAN KETAT:
 - Output WAJIB berupa satu objek JSON valid saja, TANPA teks pembuka, TANPA penjelasan, TANPA markdown code fence.
@@ -3125,6 +3442,7 @@ Skema:
 {"supplier":string|null,"noFaktur":string|null,"nominal":number|null,"tanggal":string|null,"jatuhTempo":string|null,"keterangan":string|null}
 
 Sekarang baca gambar faktur dan balas HANYA dengan JSON tersebut.`;
+    }
 
     const text = await callAI({
       messages: [{ role: 'user', content: promptText }],
@@ -3137,7 +3455,6 @@ Sekarang baca gambar faktur dan balas HANYA dengan JSON tersebut.`;
     try {
       parsed = extractJson(text);
     } catch (e) {
-      // Sertakan cuplikan respons asli AI agar mudah didiagnosa
       const preview = (text || '').trim().slice(0, 200) || '(respons kosong)';
       console.error('OCR raw response:', text);
       throw new Error('AI tidak mengembalikan JSON yang valid. Respons AI: "' + preview + '"');
@@ -3146,12 +3463,14 @@ Sekarang baca gambar faktur dan balas HANYA dengan JSON tersebut.`;
       throw new Error('Format respons tidak terduga (bukan objek JSON)');
     }
 
-    // Normalisasi: AI kadang balas string "null", "-", atau "Rp 1.500.000" pada nominal
     parsed = normalizeOcrData(parsed);
+    // Giro: bank tetap ditampung walau bukan field standar normalize
+    if (mode === 'giro' && parsed.bank == null) parsed.bank = null;
 
     ocrData = parsed;
-    renderOcrPreview(parsed);
-    showToast(getAiProviderLabel() + ' berhasil membaca faktur!');
+    currentOcrMode = mode;
+    renderOcrPreview(parsed, mode);
+    showToast(getAiProviderLabel() + (mode === 'giro' ? ' berhasil membaca giro!' : ' berhasil membaca faktur!'));
   } catch (err) {
     showToast('OCR gagal: ' + err.message, 'error');
     console.error(err);
@@ -3248,16 +3567,31 @@ function normalizeOcrData(d) {
   return out;
 }
 
-function renderOcrPreview(data) {
-  const fields = [
-    { label: 'Supplier', key: 'supplier', val: data.supplier || '-' },
-    { label: 'No. Faktur', key: 'noFaktur', val: data.noFaktur || '-' },
-    { label: 'Nominal', key: 'nominal', val: data.nominal ? formatRp(data.nominal) : '-' },
-    { label: 'Tanggal', key: 'tanggal', val: data.tanggal ? formatDate(data.tanggal) : '-' },
-    { label: 'Jatuh Tempo', key: 'jatuhTempo', val: data.jatuhTempo ? formatDate(data.jatuhTempo) : '-' },
-    { label: 'Keterangan', key: 'keterangan', val: data.keterangan || '-' },
-  ];
-  const previewEl = document.getElementById('ocrPreview');
+function renderOcrPreview(data, mode) {
+  mode = mode === 'giro' ? 'giro' : 'faktur';
+  const sx = _suffix(mode);
+  let fields;
+  if (mode === 'giro') {
+    fields = [
+      { label: 'Penerima', key: 'supplier', val: data.supplier || '-' },
+      { label: 'Bank Penerbit', key: 'bank', val: data.bank || '-' },
+      { label: 'No. Giro', key: 'noFaktur', val: data.noFaktur || '-' },
+      { label: 'Nominal', key: 'nominal', val: data.nominal ? formatRp(data.nominal) : '-' },
+      { label: 'Tgl. Terbit', key: 'tanggal', val: data.tanggal ? formatDate(data.tanggal) : '-' },
+      { label: 'Tgl. Cair', key: 'jatuhTempo', val: data.jatuhTempo ? formatDate(data.jatuhTempo) : '-' },
+      { label: 'Keterangan', key: 'keterangan', val: data.keterangan || '-' },
+    ];
+  } else {
+    fields = [
+      { label: 'Supplier', key: 'supplier', val: data.supplier || '-' },
+      { label: 'No. Faktur', key: 'noFaktur', val: data.noFaktur || '-' },
+      { label: 'Nominal', key: 'nominal', val: data.nominal ? formatRp(data.nominal) : '-' },
+      { label: 'Tanggal', key: 'tanggal', val: data.tanggal ? formatDate(data.tanggal) : '-' },
+      { label: 'Jatuh Tempo', key: 'jatuhTempo', val: data.jatuhTempo ? formatDate(data.jatuhTempo) : '-' },
+      { label: 'Keterangan', key: 'keterangan', val: data.keterangan || '-' },
+    ];
+  }
+  const previewEl = document.getElementById('ocrPreview' + sx);
   if (previewEl) previewEl.innerHTML = fields.map(f => `
     <div class="ocr-field">
       <span class="ocr-field-label">${esc(f.label)}</span>
@@ -3267,19 +3601,44 @@ function renderOcrPreview(data) {
       </div>
     </div>
   `).join('');
-  const wrap = document.getElementById('ocrPreviewWrap');
+  const wrap = document.getElementById('ocrPreviewWrap' + sx);
   if (wrap) wrap.style.display = 'block';
 }
 
-function applyOcrToForm() {
+function applyOcrToForm(mode) {
+  mode = mode === 'giro' ? 'giro' : 'faktur';
   if(!ocrData) return;
-  if(ocrData.supplier) document.getElementById('fSupplier').value=ocrData.supplier;
-  if(ocrData.noFaktur) document.getElementById('fNoFaktur').value=ocrData.noFaktur;
-  if(ocrData.nominal) document.getElementById('fNominal').value=ocrData.nominal;
-  if(ocrData.tanggal) document.getElementById('fTanggal').value=ocrData.tanggal;
-  if(ocrData.jatuhTempo) document.getElementById('fJatuhTempo').value=ocrData.jatuhTempo;
-  if(ocrData.keterangan) document.getElementById('fKeterangan').value=ocrData.keterangan;
-  showToast('Data OCR diterapkan ke form!');
+  // Jika OCR dilakukan di mode lain, peringatkan
+  if (currentOcrMode && currentOcrMode !== mode) {
+    showToast('OCR dilakukan untuk mode ' + (currentOcrMode === 'giro' ? 'Giro' : 'Faktur') + '. Hasil tetap diterapkan.', 'error');
+  }
+  const sx = _suffix(mode);
+  const set = (id, val) => { const el = document.getElementById(id + sx); if (el) el.value = val; };
+  if(ocrData.supplier) set('fSupplier', ocrData.supplier);
+  if(ocrData.noFaktur) set('fNoFaktur', ocrData.noFaktur);
+  if(ocrData.nominal) set('fNominal', ocrData.nominal);
+  if(ocrData.tanggal) set('fTanggal', ocrData.tanggal);
+  if(ocrData.jatuhTempo) set('fJatuhTempo', ocrData.jatuhTempo);
+  if(ocrData.keterangan) set('fKeterangan', ocrData.keterangan);
+  if(mode === 'giro' && ocrData.bank) {
+    // Coba match dengan option list, kalau tidak set ke "Lainnya"
+    const sel = document.getElementById('fBankGiro');
+    if (sel) {
+      const want = String(ocrData.bank).trim().toUpperCase();
+      let matched = false;
+      for (let i = 0; i < sel.options.length; i++) {
+        if (sel.options[i].value.toUpperCase() === want ||
+            sel.options[i].text.toUpperCase().includes(want) ||
+            want.includes(sel.options[i].value.toUpperCase())) {
+          sel.value = sel.options[i].value;
+          matched = true;
+          break;
+        }
+      }
+      if (!matched) sel.value = 'Lainnya';
+    }
+  }
+  showToast('Data OCR diterapkan ke form ' + (mode === 'giro' ? 'Giro' : 'Faktur') + '!');
 }
 
 // ====== AI INSIGHT ======
@@ -4862,8 +5221,15 @@ function bootApp() {
     loadData(); // localStorage load — cloud sync (jika ada) akan overwrite di handleAuthStateChange
     const dateEl = document.getElementById('currentDate');
     if (dateEl) dateEl.textContent = new Date().toLocaleDateString('id-ID',{weekday:'short',day:'numeric',month:'short',year:'numeric'});
+    // Init tanggal default pada kedua form (Faktur & Giro)
+    const today = new Date().toISOString().split('T')[0];
+    const fTglFaktur = document.getElementById('fTanggalFaktur');
+    if (fTglFaktur && !fTglFaktur.value) fTglFaktur.value = today;
+    const fTglGiro = document.getElementById('fTanggalGiro');
+    if (fTglGiro && !fTglGiro.value) fTglGiro.value = today;
+    // Backward-compat: kalau elemen lama masih ada
     const fTgl = document.getElementById('fTanggal');
-    if (fTgl) fTgl.value = new Date().toISOString().split('T')[0];
+    if (fTgl) fTgl.value = today;
     const pelTgl = document.getElementById('pelTanggal');
     if(pelTgl) pelTgl.value = new Date().toISOString().split('T')[0];
     // Init payment rows
