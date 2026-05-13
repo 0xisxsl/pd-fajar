@@ -3111,10 +3111,20 @@ async function runOCR(b64, mimeType) {
     const imageData = b64.split(',')[1];
     if (!imageData) throw new Error('Data gambar tidak valid');
 
-    const promptText = `Baca faktur/invoice ini dan ekstrak informasi berikut dalam format JSON murni:
-{"supplier":"nama supplier/vendor","noFaktur":"nomor faktur/invoice","nominal":angka_total_rupiah_tanpa_format,"tanggal":"YYYY-MM-DD","jatuhTempo":"YYYY-MM-DD","keterangan":"deskripsi singkat"}
-Jika tidak ada informasi, isi dengan null. Nominal angka murni. Tanggal YYYY-MM-DD.
-Balas HANYA JSON, tanpa teks lain.`;
+    const promptText = `Anda adalah OCR engine. Tugas Anda HANYA mengekstrak data faktur/invoice ke JSON.
+
+ATURAN KETAT:
+- Output WAJIB berupa satu objek JSON valid saja, TANPA teks pembuka, TANPA penjelasan, TANPA markdown code fence.
+- Mulai langsung dengan karakter { dan akhiri dengan }
+- Gunakan tepat skema field berikut (case-sensitive).
+- Jika sebuah field tidak ditemukan, gunakan null (bukan string kosong, bukan "-", bukan "N/A").
+- Field "nominal": angka murni tanpa titik/koma/Rp (contoh: 1500000, bukan "Rp 1.500.000").
+- Field "tanggal" dan "jatuhTempo": format YYYY-MM-DD (contoh: "2025-08-15").
+
+Skema:
+{"supplier":string|null,"noFaktur":string|null,"nominal":number|null,"tanggal":string|null,"jatuhTempo":string|null,"keterangan":string|null}
+
+Sekarang baca gambar faktur dan balas HANYA dengan JSON tersebut.`;
 
     const text = await callAI({
       messages: [{ role: 'user', content: promptText }],
@@ -3122,11 +3132,23 @@ Balas HANYA JSON, tanpa teks lain.`;
       imageB64: imageData,
       imageMime: mimeType
     });
-    const clean = text.replace(/```json|```/g, '').trim();
+
     let parsed;
-    try { parsed = JSON.parse(clean); }
-    catch (e) { throw new Error('AI tidak mengembalikan JSON yang valid'); }
-    if (typeof parsed !== 'object' || parsed === null) throw new Error('Format respons tidak terduga');
+    try {
+      parsed = extractJson(text);
+    } catch (e) {
+      // Sertakan cuplikan respons asli AI agar mudah didiagnosa
+      const preview = (text || '').trim().slice(0, 200) || '(respons kosong)';
+      console.error('OCR raw response:', text);
+      throw new Error('AI tidak mengembalikan JSON yang valid. Respons AI: "' + preview + '"');
+    }
+    if (typeof parsed !== 'object' || parsed === null || Array.isArray(parsed)) {
+      throw new Error('Format respons tidak terduga (bukan objek JSON)');
+    }
+
+    // Normalisasi: AI kadang balas string "null", "-", atau "Rp 1.500.000" pada nominal
+    parsed = normalizeOcrData(parsed);
+
     ocrData = parsed;
     renderOcrPreview(parsed);
     showToast(getAiProviderLabel() + ' berhasil membaca faktur!');
@@ -3136,6 +3158,94 @@ Balas HANYA JSON, tanpa teks lain.`;
   } finally {
     hideLoading();
   }
+}
+
+// Ekstraksi JSON yang tahan banting dari respons AI.
+// Menangani: code fence (```json / ``` / ~~~), backtick tunggal, teks preamble/postamble,
+// quote curly (smart quotes), dan trailing comma.
+function extractJson(raw) {
+  if (raw == null) throw new Error('respons kosong');
+  let s = String(raw).trim();
+  if (!s) throw new Error('respons kosong');
+
+  // 1. Strip code fences: ```json ... ```  /  ``` ... ```  /  ~~~ ... ~~~
+  const fenceMatch = s.match(/(?:```|~~~)\s*(?:json|JSON)?\s*([\s\S]*?)\s*(?:```|~~~)/);
+  if (fenceMatch) s = fenceMatch[1].trim();
+
+  // 2. Hapus backtick tunggal di awal/akhir
+  s = s.replace(/^`+|`+$/g, '').trim();
+
+  // 3. Coba parse langsung
+  try { return JSON.parse(s); } catch (_) { /* lanjut */ }
+
+  // 4. Cari objek JSON pertama dengan brace matching (mengabaikan brace di dalam string)
+  const start = s.indexOf('{');
+  if (start === -1) throw new Error('tidak ada objek JSON ditemukan');
+
+  let depth = 0, inStr = false, escape = false, end = -1;
+  for (let i = start; i < s.length; i++) {
+    const ch = s[i];
+    if (escape) { escape = false; continue; }
+    if (ch === '\\') { escape = true; continue; }
+    if (ch === '"') { inStr = !inStr; continue; }
+    if (inStr) continue;
+    if (ch === '{') depth++;
+    else if (ch === '}') {
+      depth--;
+      if (depth === 0) { end = i; break; }
+    }
+  }
+  if (end === -1) throw new Error('objek JSON tidak lengkap (brace tidak seimbang)');
+
+  let candidate = s.slice(start, end + 1);
+
+  // 5. Bersihkan masalah umum: smart quotes & trailing commas
+  candidate = candidate
+    .replace(/[\u201C\u201D]/g, '"')    // " "  →  "
+    .replace(/[\u2018\u2019]/g, "'")    // ' '  →  '
+    .replace(/,(\s*[}\]])/g, '$1');     // trailing comma sebelum } atau ]
+
+  try { return JSON.parse(candidate); }
+  catch (e) { throw new Error('parse error: ' + e.message); }
+}
+
+// Normalisasi nilai field OCR — AI kadang balas string kosong / "-" / "Rp 1.500.000"
+function normalizeOcrData(d) {
+  const isEmpty = (v) => v == null || v === '' || v === '-' ||
+    (typeof v === 'string' && /^(null|n\/?a|none|tidak ada|tidak diketahui)$/i.test(v.trim()));
+
+  const out = {};
+  ['supplier', 'noFaktur', 'tanggal', 'jatuhTempo', 'keterangan'].forEach(k => {
+    out[k] = isEmpty(d[k]) ? null : String(d[k]).trim();
+  });
+
+  // Nominal: terima number atau string "Rp 1.500.000,00"
+  if (isEmpty(d.nominal)) {
+    out.nominal = null;
+  } else if (typeof d.nominal === 'number') {
+    out.nominal = d.nominal;
+  } else {
+    const digits = String(d.nominal).replace(/[^\d,.-]/g, '');
+    // Buang separator ribuan (titik atau koma yang bukan desimal terakhir)
+    // Strategi sederhana: ambil hanya digit, abaikan desimal untuk Rupiah
+    const onlyDigits = digits.replace(/[.,]\d{1,2}$/, '').replace(/[^\d]/g, '');
+    out.nominal = onlyDigits ? parseInt(onlyDigits, 10) : null;
+  }
+
+  // Validasi format tanggal — AI kadang balas "15-08-2025" atau "15/08/2025"
+  ['tanggal', 'jatuhTempo'].forEach(k => {
+    if (!out[k]) return;
+    const v = out[k];
+    if (/^\d{4}-\d{2}-\d{2}$/.test(v)) return; // sudah benar
+    // Coba konversi DD-MM-YYYY atau DD/MM/YYYY → YYYY-MM-DD
+    const m = v.match(/^(\d{1,2})[-/](\d{1,2})[-/](\d{4})$/);
+    if (m) {
+      const dd = m[1].padStart(2, '0'), mm = m[2].padStart(2, '0'), yyyy = m[3];
+      out[k] = `${yyyy}-${mm}-${dd}`;
+    }
+  });
+
+  return out;
 }
 
 function renderOcrPreview(data) {
